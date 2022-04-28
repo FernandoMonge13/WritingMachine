@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1598</width>
+    <height>984</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1598</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Archivos</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="actionGuardadr_como"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_folder-open-storage-file-organize_3209339.png</normaloff>../Imagenes/iconfinder_folder-open-storage-file-organize_3209339.png</iconset>
+   </property>
+   <property name="text">
+    <string>Abrir</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_158-Save_2123968.png</normaloff>../Imagenes/iconfinder_158-Save_2123968.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_circle_close_cancel_exit_quit_delete_4831037.png</normaloff>../Imagenes/iconfinder_circle_close_cancel_exit_quit_delete_4831037.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_icon-play_211876.png</normaloff>../Imagenes/iconfinder_icon-play_211876.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_interface-solid-multimedia-stop-button-1_6127256.png</normaloff>../Imagenes/iconfinder_interface-solid-multimedia-stop-button-1_6127256.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionNext_Line">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Imagenes/iconfinder_right_4_1_4829859.png</normaloff>../Imagenes/iconfinder_right_4_1_4829859.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next Line</string>
+   </property>
+  </action>
+  <action name="actionGuardadr_como">
+   <property name="text">
+    <string>Guardar como...</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
