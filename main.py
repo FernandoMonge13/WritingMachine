@@ -10,9 +10,14 @@ from PyQt5 import uic
 from GUI.Texto.Highlighter import Highlighter
 from GUI.Texto.PlainTextEdit import PlainTextEdit
 
+from Lexer import Lexer
+from Lexer import Parser
+from Lexer.Lexer import BasicLexer
+
 #Crear ejecutable
 #pyinstaller --windowed --onefile main.py
 #pyinstaller --windowed --onefile --icon=./GUI/imagenes/WindowIcon.png main.py
+
 
 
 class MainWindow(QMainWindow):
@@ -152,7 +157,13 @@ class MainWindow(QMainWindow):
         # print("Close")
 
     def compilar(self, codeInput):
-        print("Compilar")
+        lexer = BasicLexer()
+        env = {}
+        text = codeInput.toPlainText()
+        if text:
+            lex = lexer.tokenize(text)
+            for token in lex:
+                print(token)
 
 
 if __name__ == '__main__':
