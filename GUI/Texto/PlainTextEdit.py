@@ -46,7 +46,7 @@ class PlainTextEdit(QPlainTextEdit):
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            lineColor = QColor(Qt.black).lighter(100)
+            lineColor = QColor("#252525").lighter(100)
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()
@@ -68,7 +68,6 @@ class PlainTextEdit(QPlainTextEdit):
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.black)
                 painter.drawText(0, top, self.lineNumberArea.width(), height, Qt.AlignRight, number)
-
 
             block = block.next()
             top = bottom
