@@ -10,9 +10,11 @@ from PyQt5 import uic
 from GUI.Texto.Highlighter import Highlighter
 from GUI.Texto.PlainTextEdit import PlainTextEdit
 
-from Lexer import Lexer
-from Lexer import Parser
-from Lexer.Lexer import BasicLexer
+import Hardware.Hardware as hp
+
+# from Lexer import Lexer
+# from Lexer import Parser
+# from Lexer.Lexer import BasicLexer
 
 #Crear ejecutable
 #pyinstaller --windowed --onefile main.py
@@ -167,7 +169,10 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    app.exec_()
+    # app = QApplication(sys.argv)
+    # window = MainWindow()
+    # window.show()
+    # app.exec_()
+
+    hp.taste()
+
