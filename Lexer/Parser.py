@@ -1,6 +1,10 @@
 from sly import Lexer
 from sly import Parser
 
+#The parser is made up of grammar rules,
+#we give our grammar rules to the parser generator,
+#and the parser generator gives us a parser for that grammar
+
 class BasicLexer(Lexer):
     tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, FUN, TO, ARROW, EQEQ }
     ignore = '\t '
@@ -44,6 +48,8 @@ class BasicParser(Parser):
 
     def __init__(self):
         self.env = { }
+
+    #Si la entrada es vacia, simplemente se ignora
     @_('')
     def statement(self, p):
         pass

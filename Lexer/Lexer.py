@@ -6,7 +6,8 @@ class BasicLexer(Lexer):
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
 
-    # Define tokens
+    #Tokens
+    #Las siguentes son todas expresiones regulares
     IF = r'IF'
     THEN = r'THEN'
     ELSE = r'ELSE'
@@ -19,15 +20,18 @@ class BasicLexer(Lexer):
 
     EQEQ = r'=='
 
+    #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')
     def NUMBER(self, t):
         t.value = int(t.value)
         return t
 
+    #r'#.*' : expresion regular para el simbolo de comentario y lo que siga
     @_(r'#.*')
     def COMMENT(self, t):
         pass
 
+    #r'\n+' : expresion regular para salto de linea
     @_(r'\n+')
     def newline(self,t ):
         self.lineno = t.value.count('\n')
