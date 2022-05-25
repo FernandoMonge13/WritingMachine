@@ -12,9 +12,9 @@ from GUI.Texto.PlainTextEdit import PlainTextEdit
 
 import Hardware.Hardware as hp
 
-# from Lexer import Lexer
-# from Lexer import Parser
-# from Lexer.Lexer import BasicLexer
+from Lexer import Lexer
+from Lexer import Parser
+from Lexer.Lexer import BasicLexer
 
 #Crear ejecutable
 #pyinstaller --windowed --onefile main.py
