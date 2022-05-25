@@ -1,10 +1,15 @@
 from pymata4 import pymata4
 import time
+import threading
 
 current_time = 4
 
 
-# def aux2():
+def aux2():
+
+    while (True):
+        print("Radio Check")
+        time.sleep(1)
 
 #   movement.set_pin_mode_servo(9)
 #   movement.servo_write(9, 0)
@@ -58,8 +63,12 @@ def taste():
     movement.set_pin_mode_digital_output(4)
     movement.set_pin_mode_digital_output(5)
 
-    x_minus(movement)
-    x_plus(movement)
+    th1 = threading.Thread(target=aux2)
+    th1.start()
+
+    while (True):
+        x_minus(movement)
+        x_plus(movement)
 
 
 def y_plus(movement):
