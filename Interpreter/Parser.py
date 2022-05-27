@@ -7,6 +7,9 @@ from sly import Parser
 from Interpreter.Lexer import BasicLexer
 
 class BasicParser(Parser):
+
+    errores = []
+
     tokens = BasicLexer.tokens
 
     precedence = (
@@ -31,7 +34,7 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
 
-    @_('FUN NAME "(" ")" ARROW statement')
+    @_('PARA NAME "(" ")" ARROW statement')
     def statement(self, p):
         return ('fun_def', p.NAME, p.statement)
 

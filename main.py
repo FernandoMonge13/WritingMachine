@@ -163,12 +163,14 @@ class MainWindow(QMainWindow):
         parser = BasicParser()
         env = {}
         text = codeInput.toPlainText()
-        if text:
-            tree = parser.parse(lexer.tokenize(text))
-            BasicExecute(tree, env)
-            # lex = lexer.tokenize(text)
-            # for token in lex:
-            #     print(token)
+        textsplit = text.split("\n")
+        for line in textsplit:
+            if line:
+                tree = parser.parse(lexer.tokenize(line))
+                BasicExecute(tree, env)
+                # lex = lexer.tokenize(text)
+                # for token in lex:
+                #     print(token)
 
 
 if __name__ == '__main__':

@@ -1,10 +1,12 @@
 from sly import Lexer
 
 class BasicLexer(Lexer):
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, FUN, TO, ARROW, EQEQ }
+    errores = []
+
+    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ }
     ignore = '\t '
 
-    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
+    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']'}
 
     #Tokens
     #Las siguentes son todas expresiones regulares
@@ -12,10 +14,12 @@ class BasicLexer(Lexer):
     THEN = r'THEN'
     ELSE = r'ELSE'
     FOR = r'FOR'
-    FUN = r'FUN'
+    PARA = r'PARA'
     TO = r'TO'
     ARROW = r'->'
-    NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    NAME = r'[a-z][a-zA-Z0-9_]*'
+    # NADA = r'[a-zA-Z][a-zA-Z0-9_]*'
+    # NAME = r'[a-z][a-zA-Z0-9_]{3,10}'
     STRING = r'\".*?\"'
 
     EQEQ = r'=='
@@ -27,7 +31,7 @@ class BasicLexer(Lexer):
         return t
 
     #r'#.*' : expresion regular para el simbolo de comentario y lo que siga
-    @_(r'#.*')
+    @_(r'//.*')
     def COMMENT(self, t):
         pass
 
@@ -35,6 +39,18 @@ class BasicLexer(Lexer):
     @_(r'\n+')
     def newline(self,t ):
         self.lineno = t.value.count('\n')
+
+    @_('NAME')
+    def expr(self, p):
+        try:
+            return self.names[p.NAME]
+        except LookupError:
+            print("Undefined name '%s'" % p.NAME)
+            return 0
+
+    def error(self, t):
+        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        self.index += 1
 
 
 if __name__ == '__main__':
@@ -47,5 +63,8 @@ if __name__ == '__main__':
             break
         if text:
             lex = lexer.tokenize(text)
-            for token in lex:
-                print(token)
+            try:
+                for token in lex:
+                    print(token)
+            except EOFError:
+                break
