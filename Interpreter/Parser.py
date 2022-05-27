@@ -4,38 +4,7 @@ from sly import Parser
 #The parser is made up of grammar rules,
 #we give our grammar rules to the parser generator,
 #and the parser generator gives us a parser for that grammar
-
-class BasicLexer(Lexer):
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, FUN, TO, ARROW, EQEQ }
-    ignore = '\t '
-
-    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
-
-    # Define tokens
-    IF = r'IF'
-    THEN = r'THEN'
-    ELSE = r'ELSE'
-    FOR = r'FOR'
-    FUN = r'FUN'
-    TO = r'TO'
-    ARROW = r'->'
-    NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    STRING = r'\".*?\"'
-
-    EQEQ = r'=='
-
-    @_(r'\d+')
-    def NUMBER(self, t):
-        t.value = int(t.value)
-        return t
-
-    @_(r'#.*')
-    def COMMENT(self, t):
-        pass
-
-    @_(r'\n+')
-    def newline(self,t ):
-        self.lineno = t.value.count('\n')
+from Interpreter.Lexer import BasicLexer
 
 class BasicParser(Parser):
     tokens = BasicLexer.tokens

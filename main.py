@@ -12,9 +12,9 @@ from GUI.Texto.PlainTextEdit import PlainTextEdit
 
 import Hardware.Hardware as hp
 
-from Lexer import Lexer
-from Lexer import Parser
-from Lexer.Lexer import BasicLexer
+
+from Interpreter.BasicExecute import BasicLexer, BasicParser, BasicExecute
+
 
 #Crear ejecutable
 #pyinstaller --windowed --onefile main.py
@@ -160,19 +160,22 @@ class MainWindow(QMainWindow):
 
     def compilar(self, codeInput):
         lexer = BasicLexer()
+        parser = BasicParser()
         env = {}
         text = codeInput.toPlainText()
         if text:
-            lex = lexer.tokenize(text)
-            for token in lex:
-                print(token)
+            tree = parser.parse(lexer.tokenize(text))
+            BasicExecute(tree, env)
+            # lex = lexer.tokenize(text)
+            # for token in lex:
+            #     print(token)
 
 
 if __name__ == '__main__':
-    # app = QApplication(sys.argv)
-    # window = MainWindow()
-    # window.show()
-    # app.exec_()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec_()
 
-    hp.taste()
+    # hp.taste()
 

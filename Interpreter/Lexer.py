@@ -37,7 +37,6 @@ class BasicLexer(Lexer):
         self.lineno = t.value.count('\n')
 
 
-
 if __name__ == '__main__':
     lexer = BasicLexer()
     env = {}
