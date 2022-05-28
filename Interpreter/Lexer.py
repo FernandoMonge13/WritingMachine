@@ -3,7 +3,7 @@ from sly import Lexer
 class BasicLexer(Lexer):
     errores = []
 
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ }
+    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ, SUMA}
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']'}
@@ -17,10 +17,11 @@ class BasicLexer(Lexer):
     PARA = r'PARA'
     TO = r'TO'
     ARROW = r'->'
-    NAME = r'[a-z][a-zA-Z0-9_]*'
-    # NADA = r'[a-zA-Z][a-zA-Z0-9_]*'
-    # NAME = r'[a-z][a-zA-Z0-9_]{3,10}'
+    #NAME = r'[a-z][a-zA-Z0-9_]*'
+    NAME = r'[a-z][a-zA-Z0-9_]{2,9}'
     STRING = r'\".*?\"'
+    SUMA = r'Add'
+    #UNO = r'1'
 
     EQEQ = r'=='
 

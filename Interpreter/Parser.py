@@ -66,6 +66,16 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('add', p.expr0, p.expr1)
 
+    @_('SUMA "(" expr ")"')
+    def expr(self, p):
+        print(type(p.expr0))
+        return ('add', p.expr0, ('num', 1))
+
+    @_('SUMA "(" expr "," expr ")"')
+    def expr(self, p):
+        print(p.expr0)
+        return ('add', p.expr0, p.expr1)
+
     @_('expr "-" expr')
     def expr(self, p):
         return ('sub', p.expr0, p.expr1)
