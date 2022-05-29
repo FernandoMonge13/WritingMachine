@@ -42,6 +42,18 @@ class BasicExecute:
             else:
                 return 'FALSE'
 
+        if node[0] == 'And':
+            if self.walkTree(node[1]) == self.walkTree(node[2]) == 'TRUE':
+                return 'TRUE'
+            else:
+                return 'FALSE'
+
+        if node[0] == 'Or':
+            if self.walkTree(node[1]) == 'TRUE' or self.walkTree(node[2]) == 'TRUE':
+                return 'TRUE'
+            else:
+                return 'FALSE'
+
         if node[0] == 'num':
             return node[1]
 

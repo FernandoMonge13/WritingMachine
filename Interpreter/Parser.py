@@ -80,6 +80,14 @@ class BasicParser(Parser):
     def var_assign(self, p):
         return ('Equal', p.expr0, p.expr1)
 
+    @_('AND "(" expr "," expr ")"')
+    def var_assign(self, p):
+        return ('And', p.expr0, p.expr1)
+
+    @_('OR "(" expr "," expr ")"')
+    def var_assign(self, p):
+        return ('Or', p.expr0, p.expr1)
+
     @_('expr')
     def statement(self, p):
         return (p.expr)

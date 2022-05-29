@@ -3,7 +3,8 @@ from sly import Lexer
 class BasicLexer(Lexer):
 
     tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ,
-               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL}
+               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
+               AND, OR}
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']'}
@@ -36,6 +37,9 @@ class BasicLexer(Lexer):
 
     EQUAL = r'Equal'
     EQEQ = r'=='
+    AND = r'And'
+    OR = r'Or'
+
 
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')
