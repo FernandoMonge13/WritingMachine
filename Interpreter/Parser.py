@@ -26,6 +26,8 @@ class BasicParser(Parser):
     def statement(self, p):
         pass
 
+
+
     @_('FOR var_assign TO expr THEN statement')
     def statement(self, p):
         return ('for_loop', ('for_loop_setup', p.var_assign, p.expr), p.statement)
@@ -54,9 +56,29 @@ class BasicParser(Parser):
     def var_assign(self, p):
         return ('var_assign', p.NAME, p.expr)
 
+    @_('DEF "(" NAME "," expr ")"')
+    def var_assign(self, p):
+        return ('var_assign', p.NAME, p.expr)
+
     @_('NAME "=" STRING')
     def var_assign(self, p):
         return ('var_assign', p.NAME, p.STRING)
+
+    @_('ADD "(" NAME "," expr ")"')
+    def var_assign(self, p):
+        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), p.expr))
+
+    @_('ADD "(" NAME ")"')
+    def var_assign(self, p):
+        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), ('num', 1)))
+
+    @_('PUT "(" NAME "," expr ")"')
+    def var_assign(self, p):
+        return ('NewVar_assign', p.NAME, p.expr)
+
+    @_('EQUAL "(" expr "," expr ")"')
+    def var_assign(self, p):
+        return ('Equal', p.expr0, p.expr1)
 
     @_('expr')
     def statement(self, p):
@@ -64,17 +86,30 @@ class BasicParser(Parser):
 
     @_('expr "+" expr')
     def expr(self, p):
-        return ('add', p.expr0, p.expr1)
+        return ('sum', p.expr0, p.expr1)
 
     @_('SUMA "(" expr ")"')
     def expr(self, p):
-        print(type(p.expr0))
-        return ('add', p.expr0, ('num', 1))
+        return ('sum', p.expr, ('num', 1))
 
     @_('SUMA "(" expr "," expr ")"')
     def expr(self, p):
-        print(p.expr0)
-        return ('add', p.expr0, p.expr1)
+        return ('sum', p.expr0, p.expr1)
+
+
+
+
+    @_('SUBSTR "(" expr "," expr ")"')
+    def expr(self, p):
+        return ('sub', p.expr0, p.expr1)
+
+    @_('RANDOM "(" expr ")"')
+    def expr(self, p):
+        return ('Random', p.expr)
+
+
+
+
 
     @_('expr "-" expr')
     def expr(self, p):
@@ -84,7 +119,16 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('mul', p.expr0, p.expr1)
 
+    @_('MULT "(" expr "," expr ")"')
+    def expr(self, p):
+        return ('mul', p.expr0, p.expr1)
+
+
     @_('expr "/" expr')
+    def expr(self, p):
+        return ('div', p.expr0, p.expr1)
+
+    @_('DIV "(" expr "," expr ")"')
     def expr(self, p):
         return ('div', p.expr0, p.expr1)
 
@@ -99,6 +143,14 @@ class BasicParser(Parser):
     @_('NUMBER')
     def expr(self, p):
         return ('num', p.NUMBER)
+
+    @_('TRUE')
+    def expr(self, p):
+        return ('bool', p.TRUE)
+
+    @_('FALSE')
+    def expr(self, p):
+        return ('bool', p.FALSE)
 
 if __name__ == '__main__':
     lexer = BasicLexer()

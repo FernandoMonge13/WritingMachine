@@ -1,9 +1,9 @@
 from sly import Lexer
 
 class BasicLexer(Lexer):
-    errores = []
 
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ, SUMA}
+    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ,
+               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL}
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']'}
@@ -20,15 +20,33 @@ class BasicLexer(Lexer):
     #NAME = r'[a-z][a-zA-Z0-9_]*'
     NAME = r'[a-z][a-zA-Z0-9_]{2,9}'
     STRING = r'\".*?\"'
-    SUMA = r'Add'
-    #UNO = r'1'
 
+    TRUE = r'TRUE'
+    FALSE = r'FALSE'
+
+    DEF = r'Def'
+    ADD = r'Add'
+    PUT = r'Put'
+
+    SUMA = r'Sum'
+    MULT = r'Mult'
+    DIV = r'Div'
+    SUBSTR = r'Substr'
+    RANDOM = r'Random'
+
+    EQUAL = r'Equal'
     EQEQ = r'=='
 
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')
     def NUMBER(self, t):
         t.value = int(t.value)
+        return t
+
+    #r'\d+' : expresion regular para uno o mas digitos
+    @_(r'[+-]?([0-9]*[.])?[0-9]+')
+    def NUMBER(self, t):
+        t.value = float(t.value)
         return t
 
     #r'#.*' : expresion regular para el simbolo de comentario y lo que siga
