@@ -36,6 +36,10 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
 
+    # @_('IF condition THEN statement')
+    # def statement(self, p):
+    #     return ('if_stmt', p.condition, ('branch', p.statement))
+
     @_('PARA NAME "(" ")" ARROW statement')
     def statement(self, p):
         return ('fun_def', p.NAME, p.statement)
@@ -96,6 +100,7 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('sum', p.expr0, p.expr1)
 
+
     @_('SUMA "(" expr ")"')
     def expr(self, p):
         return ('sum', p.expr, ('num', 1))
@@ -104,9 +109,6 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('sum', p.expr0, p.expr1)
 
-
-
-
     @_('SUBSTR "(" expr "," expr ")"')
     def expr(self, p):
         return ('sub', p.expr0, p.expr1)
@@ -114,10 +116,6 @@ class BasicParser(Parser):
     @_('RANDOM "(" expr ")"')
     def expr(self, p):
         return ('Random', p.expr)
-
-
-
-
 
     @_('expr "-" expr')
     def expr(self, p):
@@ -131,7 +129,6 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('mul', p.expr0, p.expr1)
 
-
     @_('expr "/" expr')
     def expr(self, p):
         return ('div', p.expr0, p.expr1)
@@ -139,6 +136,22 @@ class BasicParser(Parser):
     @_('DIV "(" expr "," expr ")"')
     def expr(self, p):
         return ('div', p.expr0, p.expr1)
+
+    @_('expr ">" expr')
+    def expr(self, p):
+        return ('Greater', p.expr0, p.expr1)
+
+    @_('expr "<" expr')
+    def expr(self, p):
+        return ('Smaller', p.expr0, p.expr1)
+
+    @_('GREATER "(" expr "," expr ")"')
+    def expr(self, p):
+        return ('Greater', p.expr0, p.expr1)
+
+    @_('SMALLER "(" expr "," expr ")"')
+    def expr(self, p):
+        return ('Smaller', p.expr0, p.expr1)
 
     @_('"-" expr %prec UMINUS')
     def expr(self, p):

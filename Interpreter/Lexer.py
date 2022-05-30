@@ -4,10 +4,10 @@ class BasicLexer(Lexer):
 
     tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ,
                SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
-               AND, OR}
+               AND, OR, GREATER, SMALLER}
     ignore = '\t '
 
-    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']'}
+    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
 
     #Tokens
     #Las siguentes son todas expresiones regulares
@@ -18,7 +18,6 @@ class BasicLexer(Lexer):
     PARA = r'PARA'
     TO = r'TO'
     ARROW = r'->'
-    #NAME = r'[a-z][a-zA-Z0-9_]*'
     NAME = r'[a-z][a-zA-Z0-9_]{2,9}'
     STRING = r'\".*?\"'
 
@@ -34,12 +33,13 @@ class BasicLexer(Lexer):
     DIV = r'Div'
     SUBSTR = r'Substr'
     RANDOM = r'Random'
+    GREATER = r'Greater'
+    SMALLER = r'Smaller'
 
     EQUAL = r'Equal'
     EQEQ = r'=='
     AND = r'And'
     OR = r'Or'
-
 
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')

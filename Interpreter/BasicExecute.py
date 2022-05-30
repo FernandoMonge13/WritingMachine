@@ -68,6 +68,7 @@ class BasicExecute:
 
         if node[0] == 'if_stmt':
             result = self.walkTree(node[1])
+            print("Resultado: " + str(result))
             if result:
                 return self.walkTree(node[2][1])
             return self.walkTree(node[2][2])
@@ -94,6 +95,16 @@ class BasicExecute:
             return self.walkTree(node[1]) * self.walkTree(node[2])
         elif node[0] == 'div':
             return self.walkTree(node[1]) / self.walkTree(node[2])
+        elif node[0] == 'Greater':
+            if self.walkTree(node[1]) > self.walkTree(node[2]):
+                return "TRUE"
+            else:
+                return "FALSE"
+        elif node[0] == 'Smaller':
+            if self.walkTree(node[1]) < self.walkTree(node[2]):
+                return "TRUE"
+            else:
+                return "FALSE"
 
         if node[0] == 'var_assign':
             self.env[node[1]] = self.walkTree(node[2])
