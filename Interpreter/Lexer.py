@@ -2,9 +2,9 @@ from sly import Lexer
 
 class BasicLexer(Lexer):
 
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, ARROW, EQEQ,
+    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, EQEQ,
                SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
-               AND, OR, GREATER, SMALLER}
+               AND, OR, GREATER, SMALLER, FIN, COMMENT}
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
@@ -16,9 +16,9 @@ class BasicLexer(Lexer):
     ELSE = r'ELSE'
     FOR = r'FOR'
     PARA = r'PARA'
+    FIN = r'FIN'
     TO = r'TO'
-    ARROW = r'->'
-    NAME = r'[a-z][a-zA-Z0-9_]{2,9}'
+    NAME = r'[a-z][a-zA-Z0-9_@]{2,9}'
     STRING = r'\".*?\"'
 
     TRUE = r'TRUE'
@@ -41,6 +41,8 @@ class BasicLexer(Lexer):
     AND = r'And'
     OR = r'Or'
 
+    COMMENT = r'//.*'
+
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')
     def NUMBER(self, t):
@@ -54,9 +56,9 @@ class BasicLexer(Lexer):
         return t
 
     #r'#.*' : expresion regular para el simbolo de comentario y lo que siga
-    @_(r'//.*')
+    @_('COMMENT')
     def COMMENT(self, t):
-        pass
+        return t
 
     #r'\n+' : expresion regular para salto de linea
     @_(r'\n+')

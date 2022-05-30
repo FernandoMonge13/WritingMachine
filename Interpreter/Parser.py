@@ -26,7 +26,9 @@ class BasicParser(Parser):
     def statement(self, p):
         pass
 
-
+    @_('COMMENT')
+    def expr(self, p):
+        return ('Comment', p.COMMENT)
 
     @_('FOR var_assign TO expr THEN statement')
     def statement(self, p):
@@ -36,13 +38,21 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
 
-    # @_('IF condition THEN statement')
+    # @_('IF "(" condition ")" "[" statement "]"')
     # def statement(self, p):
     #     return ('if_stmt', p.condition, ('branch', p.statement))
 
-    @_('PARA NAME "(" ")" ARROW statement')
+    @_('PARA NAME "[" "]"')
     def statement(self, p):
-        return ('fun_def', p.NAME, p.statement)
+        return ('fun_def', p.NAME)
+
+    # @_('PARA NAME "(" ")" ARROW statement')
+    # def statement(self, p):
+    #     return ('fun_def', p.NAME, p.statement)
+
+    @_('FIN')
+    def expr(self, p):
+        return ('Fin', 1)
 
     @_('NAME "(" ")"')
     def statement(self, p):
@@ -100,6 +110,9 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('sum', p.expr0, p.expr1)
 
+    @_('expr expr')
+    def expr(self, p):
+        return ('sum', p.expr0, p.expr1)
 
     @_('SUMA "(" expr ")"')
     def expr(self, p):
