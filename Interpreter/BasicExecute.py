@@ -102,13 +102,14 @@ class BasicExecute:
 
                 print(self.funDictionary)
 
-
+            if node[0] == 'params':
+                return print("Params: " + str(node[1]))
 
             if node[0] == 'fun_call':
                 try:
 
-                    new_varDictionary = self.varDictionary
-                    new_funDictionary = self.funDictionary
+                    new_varDictionary = self.varDictionary.copy()
+                    new_funDictionary = self.funDictionary.copy()
 
                     new_execute = BasicExecute(new_varDictionary, new_funDictionary)
                     new_lastTree = None

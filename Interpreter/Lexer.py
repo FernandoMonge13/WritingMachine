@@ -2,15 +2,18 @@ from sly import Lexer
 
 class BasicLexer(Lexer):
 
-    tokens = { NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, EQEQ,
-               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
-               AND, OR, GREATER, SMALLER, FIN, COMMENT}
+    tokens = {NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, EQEQ,
+              SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
+              AND, OR, GREATER, SMALLER, FIN, COMMENT}
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
 
     #Tokens
     #Las siguentes son todas expresiones regulares
+    # PARAMETROS = r'([a-zA-Z0-9_@]{2,9},\s?)+'
+    # PARAMETROS = r'\[\s*([a-zA-Z0-9_@]{2,9})(,(\s?)*[a-zA-Z0-9_@]{2,9})+\s*\]'
+
     IF = r'IF'
     THEN = r'THEN'
     ELSE = r'ELSE'

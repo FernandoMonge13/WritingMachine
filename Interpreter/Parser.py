@@ -42,26 +42,53 @@ class BasicParser(Parser):
     # def statement(self, p):
     #     return ('if_stmt', p.condition, ('branch', p.statement))
 
-    @_('PARA NAME "[" "]"')
-    def statement(self, p):
-        return ('fun_def', p.NAME)
 
-    # @_('PARA NAME "(" ")" ARROW statement')
-    # def statement(self, p):
-    #     return ('fun_def', p.NAME, p.statement)
 
-    @_('FIN')
+
+
+    #Declaracion de sintaxis básica
+
+    @_('NAME')
     def expr(self, p):
-        return ('Fin', 1)
+        return ('var', p.NAME)
 
-    @_('NAME "(" ")"')
+    @_('expr')
     def statement(self, p):
-        return ('fun_call', p.NAME)
+        return (p.expr)
 
-    @_('expr EQEQ expr')
-    def condition(self, p):
-        return ('condition_eqeq', p.expr0, p.expr1)
+    @_('"-" expr %prec UMINUS')
+    def expr(self, p):
+        return p.expr
 
+
+    @_('NUMBER')
+    def expr(self, p):
+        return ('num', p.NUMBER)
+
+    @_('TRUE')
+    def expr(self, p):
+        return ('bool', p.TRUE)
+
+    @_('FALSE')
+    def expr(self, p):
+        return ('bool', p.FALSE)
+
+
+    @_('expr "," expr')
+    def params(self, p):
+        return [p.expr0, p.expr1]
+
+    @_('params "," expr')
+    def params(self, p):
+        lista = []
+        for i in p.params:
+            lista.append(i)
+        lista.append(p.expr)
+        return lista
+
+
+
+    #Definicion de funciones para la declaracion de variables
     @_('var_assign')
     def statement(self, p):
         return p.var_assign
@@ -78,34 +105,50 @@ class BasicParser(Parser):
     def var_assign(self, p):
         return ('var_assign', p.NAME, p.STRING)
 
-    @_('ADD "(" NAME "," expr ")"')
-    def var_assign(self, p):
-        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), p.expr))
-
-    @_('ADD "(" NAME ")"')
-    def var_assign(self, p):
-        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), ('num', 1)))
 
     @_('PUT "(" NAME "," expr ")"')
     def var_assign(self, p):
         return ('NewVar_assign', p.NAME, p.expr)
 
-    @_('EQUAL "(" expr "," expr ")"')
-    def var_assign(self, p):
-        return ('Equal', p.expr0, p.expr1)
 
-    @_('AND "(" expr "," expr ")"')
-    def var_assign(self, p):
-        return ('And', p.expr0, p.expr1)
 
-    @_('OR "(" expr "," expr ")"')
-    def var_assign(self, p):
-        return ('Or', p.expr0, p.expr1)
 
-    @_('expr')
+    #Definicion de funciones para la declaracion de funciones
+    @_('PARA NAME "[" "]"')
     def statement(self, p):
-        return (p.expr)
+        return ('fun_def', p.NAME)
 
+    @_('PARA NAME "[" NAME "]"')
+    def statement(self, p):
+        print(p.NAME1)
+        return ('fun_def', p.NAME0, p.NAME1)
+
+    @_('PARA NAME "[" params "]"')
+    def statement(self, p):
+        return ('fun_def', p.NAME, p.params)
+
+    @_('FIN')
+    def expr(self, p):
+        return ('Fin', 1)
+
+
+    @_('NAME "(" ")"')
+    def statement(self, p):
+        return ('fun_call', p.NAME)
+
+    @_('NAME "(" NAME ")"')
+    def statement(self, p):
+        return ('fun_call', p.NAME0, p.NAME1)
+
+    @_('NAME "(" params ")"')
+    def statement(self, p):
+        return ('fun_call', p.NAME, p.params)
+
+
+
+
+
+    #Definición de funciones para las operaciones de suma
     @_('expr "+" expr')
     def expr(self, p):
         return ('sum', p.expr0, p.expr1)
@@ -114,77 +157,123 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('sum', p.expr0, p.expr1)
 
-    @_('SUMA "(" expr ")"')
+    @_('SUMA "(" params ")"')
     def expr(self, p):
-        return ('sum', p.expr, ('num', 1))
+        if len(p.params) == 2:
+            return ('sum', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
-    @_('SUMA "(" expr "," expr ")"')
-    def expr(self, p):
-        return ('sum', p.expr0, p.expr1)
+    @_('ADD "(" NAME ")"')
+    def var_assign(self, p):
+        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), ('num', 1)))
 
-    @_('SUBSTR "(" expr "," expr ")"')
-    def expr(self, p):
-        return ('sub', p.expr0, p.expr1)
+    @_('ADD "(" NAME "," expr ")"')
+    def var_assign(self, p):
+        return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), p.expr))
 
-    @_('RANDOM "(" expr ")"')
-    def expr(self, p):
-        return ('Random', p.expr)
 
+
+
+    #Definición de funciones para las operaciones de resta
     @_('expr "-" expr')
     def expr(self, p):
         return ('sub', p.expr0, p.expr1)
 
+    @_('SUBSTR "(" params ")"')
+    def expr(self, p):
+        if len(p.params) == 2:
+            return ('sub', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
+
+
+
+    #Definición de funciones para las operaciones de multiplicación
     @_('expr "*" expr')
     def expr(self, p):
         return ('mul', p.expr0, p.expr1)
 
-    @_('MULT "(" expr "," expr ")"')
+    @_('MULT "(" params ")"')
     def expr(self, p):
-        return ('mul', p.expr0, p.expr1)
+        if len(p.params) == 2:
+            return ('mul', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
+
+
+    #Definición de funciones para las operaciones de división
     @_('expr "/" expr')
     def expr(self, p):
         return ('div', p.expr0, p.expr1)
 
-    @_('DIV "(" expr "," expr ")"')
+    @_('DIV "(" params ")"')
     def expr(self, p):
-        return ('div', p.expr0, p.expr1)
+        if len(p.params) == 2:
+            return ('div', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
+
+
+
+    #Definición de funciones para las operaciones de comparaciones
     @_('expr ">" expr')
     def expr(self, p):
         return ('Greater', p.expr0, p.expr1)
+
+    @_('GREATER "(" params ")"')
+    def expr(self, p):
+        if len(p.params) == 2:
+            return ('Greater', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
     @_('expr "<" expr')
     def expr(self, p):
         return ('Smaller', p.expr0, p.expr1)
 
-    @_('GREATER "(" expr "," expr ")"')
+    @_('SMALLER "(" params ")"')
     def expr(self, p):
-        return ('Greater', p.expr0, p.expr1)
+        if len(p.params) == 2:
+            return ('Smaller', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
-    @_('SMALLER "(" expr "," expr ")"')
-    def expr(self, p):
-        return ('Smaller', p.expr0, p.expr1)
+    @_('EQUAL "(" params ")"')
+    def var_assign(self, p):
+        if len(p.params) == 2:
+            return ('Equal', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
-    @_('"-" expr %prec UMINUS')
-    def expr(self, p):
-        return p.expr
+    @_('expr EQEQ expr')
+    def condition(self, p):
+        return ('condition_eqeq', p.expr0, p.expr1)
 
-    @_('NAME')
-    def expr(self, p):
-        return ('var', p.NAME)
+    @_('AND "(" params ")"')
+    def var_assign(self, p):
+        if len(p.params) == 2:
+            return ('And', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
-    @_('NUMBER')
-    def expr(self, p):
-        return ('num', p.NUMBER)
 
-    @_('TRUE')
-    def expr(self, p):
-        return ('bool', p.TRUE)
+    @_('OR "(" params ")"')
+    def var_assign(self, p):
+        if len(p.params) == 2:
+            return ('Or', p.params[0], p.params[1])
+        print('Error: La cantidad de parametros no es correcta')
 
-    @_('FALSE')
+
+
+
+
+    #Definición de funcion para Random
+    @_('RANDOM "(" expr ")"')
     def expr(self, p):
-        return ('bool', p.FALSE)
+        return ('Random', p.expr)
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     lexer = BasicLexer()
