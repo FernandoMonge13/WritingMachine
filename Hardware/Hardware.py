@@ -1,127 +1,295 @@
 from pymata4 import pymata4
 import time
-import threading
-
-current_time = 4
 
 
-def aux2():
+class Hardware:
 
-    while (True):
-        print("Radio Check")
+    def __init__(self):
+        self.movement = pymata4.Pymata4()
+        self.movement.set_pin_mode_digital_output(2)
+        self.movement.set_pin_mode_digital_output(3)
+
+        self.movement.set_pin_mode_digital_output(4)
+        self.movement.set_pin_mode_digital_output(5)
+
+        self.movement.set_pin_mode_servo(9)
+
+        self.current_time_yminus = 0.4
+        self.current_time_yplus = 0.44
+        self.current_time_xplus = 0.5
+        self.current_time_xminus = 0.54
+        self.current_time_diagonal = 0.65
+
+        self.speed = 1
+
+    """
+    This method allows diagonal movements
+    to the first quadrant 
+    """
+    def diagonal1(self):
+
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
+
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
+
+        # X
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
+
+        # Y
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(3, 1)
+
+        # X start
+        self.movement.digital_write(4, 1)
+
+        # Y start
+        self.movement.digital_write(2, 0)
+
+        time.sleep(self.current_time_diagonal)
+
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(4, 0)
+
         time.sleep(1)
 
-#   movement.set_pin_mode_servo(9)
-#   movement.servo_write(9, 0)
-#   time.sleep(1)
-#   movement.servo_write(9, 180)
-#   time.sleep(1)
+    """
+    This method allows diagonal movements
+    to the second quadrant 
+    """
+    def diagonal2(self):
 
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
 
-#   while(True):
-#
-#     time.sleep(current_time)
-#
-#     movement.digital_write(2, 0)
-#     movement.digital_write(3, 0)
-#
-#     time.sleep(1)
-#
-#     movement.digital_write(2, 0)
-#     movement.digital_write(3, 1)
-#     # start = time.time()
-#
-#
-#     # input("P")
-#     time.sleep(current_time)
-#
-#     # end = time.time()
-#
-#     movement.digital_write(2, 0)
-#     movement.digital_write(3, 0)
-#
-#     time.sleep(1)
-#
-#     movement.digital_write(2, 1)
-#     movement.digital_write(3, 0)
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
 
+        # X
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
 
-# print(end - start)
+        # Y
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(3, 1)
 
-# (2,0) (3,1) = y+
-# (2,1) (3,0) = y-
+        # X start
+        self.movement.digital_write(5, 1)
 
-# (4,0) (5,1) = x+
-# (4,1) (5,0) = x-
+        # Y start
+        self.movement.digital_write(2, 0)
 
+        time.sleep(self.current_time_diagonal)
 
-def taste():
-    movement = pymata4.Pymata4()
-    movement.set_pin_mode_digital_output(2)
-    movement.set_pin_mode_digital_output(3)
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(5, 0)
 
-    movement.set_pin_mode_digital_output(4)
-    movement.set_pin_mode_digital_output(5)
+        time.sleep(1)
 
-    th1 = threading.Thread(target=aux2)
-    th1.start()
+    """
+    This method allows diagonal movements
+    to the third quadrant 
+    """
+    def diagonal3(self):
 
-    while (True):
-        x_minus(movement)
-        x_plus(movement)
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
 
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
 
-def y_plus(movement):
-    movement.digital_write(2, 0)
-    movement.digital_write(3, 1)
+        # X
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
 
-    time.sleep(current_time)
+        # Y
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(3, 1)
 
-    movement.digital_write(2, 0)
-    movement.digital_write(3, 0)
+        # X start
+        self.movement.digital_write(4, 1)
 
+        # Y start
+        self.movement.digital_write(3, 0)
 
-def y_minus(movement):
-    movement.digital_write(2, 1)
-    movement.digital_write(3, 0)
+        time.sleep(self.current_time_diagonal)
 
-    time.sleep(current_time)
+        self.movement.digital_write(3, 1)
+        self.movement.digital_write(4, 0)
 
-    movement.digital_write(2, 0)
-    movement.digital_write(3, 0)
+        time.sleep(1)
 
+    """
+    This method allows diagonal movements
+    to the fourth quadrant 
+    """
+    def diagonal4(self):
 
-def x_plus(movement):
-    movement.digital_write(4, 0)
-    movement.digital_write(5, 1)
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
 
-    time.sleep(current_time)
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
 
-    movement.digital_write(4, 0)
-    movement.digital_write(5, 0)
+        # X
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
 
+        # Y
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(3, 1)
 
-def x_minus(movement):
-    movement.digital_write(4, 1)
-    movement.digital_write(5, 0)
+        # X start
+        self.movement.digital_write(5, 1)
 
-    time.sleep(current_time)
+        # Y start
+        self.movement.digital_write(3, 0)
 
-    movement.digital_write(4, 0)
-    movement.digital_write(5, 0)
+        time.sleep(self.current_time_diagonal)
 
+        self.movement.digital_write(3, 1)
+        self.movement.digital_write(5, 0)
 
-def cali(movement):
-    movement.digital_write(2, 1)
-    movement.digital_write(3, 0)
+        time.sleep(1)
 
-    start = time.time()
+    # (2,0) (3,1) = y+
+    # (2,1) (3,0) = y-
 
-    input("P")
+    # (4,0) (5,1) = x+
+    # (4,1) (5,0) = x-
 
-    movement.digital_write(2, 0)
-    movement.digital_write(3, 0)
+    """
+    This method retracts both colors
+    """
+    def up(self):
+        self.movement.servo_write(9, 90)
+        time.sleep(1)
 
-    end = time.time()
+    """
+    This method takes out the black color
+    """
+    def down_black(self):
+        self.movement.servo_write(9, 0)
+        time.sleep(1)
 
-    print(end - start)
+    """
+    This method takes out the black color
+    """
+    def down_blue(self):
+        self.movement.servo_write(9, 180)
+        time.sleep(1)
+
+    """
+    Provide movements on Y+ 
+    """
+    def y_plus(self):
+        self.movement.digital_write(2, 0)
+        self.movement.digital_write(3, 1)
+
+        time.sleep(self.current_time_yplus)
+
+        self.movement.digital_write(2, 0)
+        self.movement.digital_write(3, 0)
+
+        time.sleep(self.speed)
+
+    """
+    Provide movements on Y- 
+    """
+    def y_minus(self):
+        self.movement.digital_write(2, 1)
+        self.movement.digital_write(3, 0)
+
+        time.sleep(self.current_time_yminus)
+
+        self.movement.digital_write(2, 0)
+        self.movement.digital_write(3, 0)
+
+        time.sleep(self.speed)
+
+    """
+    Provide movements on X+ 
+    """
+    def x_plus(self):
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 1)
+
+        time.sleep(self.current_time_xplus)
+
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
+
+        time.sleep(self.speed)
+
+    """
+    Provide movements on X- 
+    """
+    def x_minus(self):
+        self.movement.digital_write(4, 1)
+        self.movement.digital_write(5, 0)
+
+        time.sleep(self.current_time_xminus)
+
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
+
+        time.sleep(self.speed)
+
+    """
+    Method used control the drawing speed
+    """
+    def set_speed(self, speed):
+        if 1 <= speed <= 5:
+            self.speed = speed
+        else:
+            print("Speed most be ->  1 <= speed <= 5 ")
+
+    """
+    Method used to reset y axy
+    """
+    def cali_y(self):
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
+
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
+
+        self.movement.digital_write(2, 0)
+        self.movement.digital_write(3, 1)
+
+        start = time.time()
+
+        input("P")
+
+        self.movement.digital_write(2, 0)
+        self.movement.digital_write(3, 0)
+
+        end = time.time()
+
+        print(end - start)
+
+    """
+    Method used to reset y axy
+    """
+    def cali_x(self):
+        # (2,0) (3,1) = y+
+        # (2,1) (3,0) = y-
+
+        # (4,0) (5,1) = x+
+        # (4,1) (5,0) = x-
+
+        self.movement.digital_write(4, 1)
+        self.movement.digital_write(5, 0)
+
+        start = time.time()
+
+        input("P")
+
+        self.movement.digital_write(4, 0)
+        self.movement.digital_write(5, 0)
+
+        end = time.time()
+
+        print(end - start)

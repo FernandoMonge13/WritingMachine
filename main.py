@@ -10,8 +10,8 @@ from PyQt5 import uic
 from GUI.Texto.Highlighter import Highlighter
 from GUI.Texto.PlainTextEdit import PlainTextEdit
 
-import Hardware.Hardware as hp
-
+import Hardware.Hardware as machine
+actions = machine.Hardware()
 
 from Interpreter.BasicExecute import BasicLexer, BasicParser, BasicExecute
 
@@ -179,5 +179,4 @@ if __name__ == '__main__':
     window.show()
     app.exec_()
 
-    # hp.taste()
-
+    #actions.
