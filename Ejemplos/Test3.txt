@@ -1,0 +1,14 @@
+aaa=3
+bbb=5
+
+Sum(aaa,bbb)
+
+aaa+bbb
+
+
+PARA funcion []
+fff=4
+fff
+FIN
+
+funcion()

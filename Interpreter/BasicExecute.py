@@ -7,6 +7,7 @@ class BasicExecute:
 
     isReadingFunction = False
     instructionsFunction = []
+    paramsFunction = {}
     functionName = ""
 
     lastTree = None
@@ -40,6 +41,7 @@ class BasicExecute:
             if isinstance(node, str):
                 return node
 
+
             if node is None:
                 return None
 
@@ -51,7 +53,7 @@ class BasicExecute:
                     self.walkTree(node[2])
 
             if node[0] == 'Comment':
-                return self.walkTree(node[1])
+                pass
 
 
             if node[0] == 'Equal':
@@ -85,20 +87,22 @@ class BasicExecute:
                     return node[1]
 
             if node[0] == 'if_stmt':
-                result = self.walkTree(node[1])
-                print("Resultado: " + str(result))
-                if result:
-                    return self.walkTree(node[2][1])
-                return self.walkTree(node[2][2])
+                if self.walkTree(node[1]) == 'TRUE':
+                    return self.walkTree(node[2])
 
-            if node[0] == 'condition_eqeq':
-                return self.walkTree(node[1]) == self.walkTree(node[2])
+            if node[0] == 'statement_list':
+                for i in node[1]:
+                    self.walkTree(i)
 
             if node[0] == 'fun_def':
 
                 self.functionName = node[1]
                 self.funDictionary[node[1]] = []
                 self.isReadingFunction = True
+
+                if len(node)==3:
+                    self.paramsFunction[node[1]] = node[2]
+                    print("Parametros: ", self.paramsFunction)
 
                 print(self.funDictionary)
 
@@ -114,9 +118,22 @@ class BasicExecute:
                     new_execute = BasicExecute(new_varDictionary, new_funDictionary)
                     new_lastTree = None
 
-                    for instruction in self.funDictionary[node[1]]:
+                    instructionsAux = []
+
+                    if len(node)==3:
+                        if len(node[2])==len(self.paramsFunction[node[1]]):
+                            print("Los parametros son iguales")
+
+                            for i in range(len(node[2])):
+                                instructionsAux.append(('var_assign', self.paramsFunction[node[1]][i], node[2][i]))
+
+                        else:
+                            return print("La cantidad de parametros es diferente a la cantidad de parametros definidos")
 
 
+                    instructions = instructionsAux + self.funDictionary[node[1]]
+
+                    for instruction in instructions:
                         new_tree = instruction
                         new_execute.startExecute(new_tree, new_lastTree, new_varDictionary, new_funDictionary)
                         new_lastTree = new_tree
@@ -124,7 +141,7 @@ class BasicExecute:
 
                 except LookupError:
                     print("Undefined function '%s'" % node[1])
-                    return 0
+
 
             if node[0] == 'sum':
                 return self.walkTree(node[1]) + self.walkTree(node[2])
@@ -147,7 +164,7 @@ class BasicExecute:
 
             if node[0] == 'var_assign':
                 self.varDictionary[node[1]] = self.walkTree(node[2])
-                print(varDictionary)
+                print(self.varDictionary)
                 return node[1]
 
             if node[0] == 'NewVar_assign':
@@ -167,6 +184,14 @@ class BasicExecute:
                 except LookupError:
                     print("Undefined variable '"+node[1]+"' found!")
                     return "Undefined variable '"+node[1]+"' found!"
+
+            if node[0] == 'String':
+                return node[1]
+
+            if node[0] == 'Print':
+                for i in range(len(node[1])):
+                    print(self.walkTree(node[1][i]))
+
 
             if node[0] == 'for_loop':
                 if node[1][0] == 'for_loop_setup':
@@ -191,9 +216,11 @@ class BasicExecute:
                 self.funDictionary[self.functionName] = self.instructionsFunction
                 self.instructionsFunction = []
                 self.functionName = ""
-                print(funDictionary)
+                print(self.funDictionary)
             else:
                 self.instructionsFunction.append(node)
+
+            return 0
 
 
 if __name__ == '__main__':

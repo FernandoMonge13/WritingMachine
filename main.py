@@ -11,10 +11,9 @@ from GUI.Texto.Highlighter import Highlighter
 from GUI.Texto.PlainTextEdit import PlainTextEdit
 
 import Hardware.Hardware as machine
-actions = machine.Hardware()
 
 from Interpreter.BasicExecute import BasicLexer, BasicParser, BasicExecute
-
+import threading
 
 #Crear ejecutable
 #pyinstaller --windowed --onefile main.py
@@ -59,6 +58,8 @@ class MainWindow(QMainWindow):
         stop.setIcon(PyQt5.QtGui.QIcon("GUI/imagenes/Stop.png"))
         close.setIcon(PyQt5.QtGui.QIcon("GUI/imagenes/Close.png"))
         compilar.setIcon(PyQt5.QtGui.QIcon("GUI/imagenes/Compile.png"))
+
+
 
         # Se definen las acciones de la barra de acciones
         abrir.triggered.connect(lambda: self.abrir(codeInput))
@@ -159,15 +160,29 @@ class MainWindow(QMainWindow):
         # print("Close")
 
     def compilar(self, codeInput):
+
+        t1 = threading.Thread(target=self.compilar_thread, args=(codeInput.toPlainText(),))
+        t1.start()
+
+    def compilar_thread(self, codeInput):
         lexer = BasicLexer()
         parser = BasicParser()
-        env = {}
-        text = codeInput.toPlainText()
+        varDictionary = {}
+        funDictionary = {}
+
+        execute = BasicExecute(varDictionary, funDictionary)
+        lastTree = None
+
+        text = codeInput
         textsplit = text.split("\n")
+
+
+        print(textsplit)
         for line in textsplit:
             if line:
                 tree = parser.parse(lexer.tokenize(line))
-                BasicExecute(tree, env)
+                execute.startExecute(tree, lastTree, varDictionary, funDictionary)
+                lastTree = tree
                 # lex = lexer.tokenize(text)
                 # for token in lex:
                 #     print(token)
@@ -180,3 +195,4 @@ if __name__ == '__main__':
     app.exec_()
 
     #actions.
+    # actions = machine.Hardware()

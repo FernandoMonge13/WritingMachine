@@ -27,22 +27,41 @@ class BasicParser(Parser):
         pass
 
     @_('COMMENT')
-    def expr(self, p):
+    def statement(self, p):
         return ('Comment', p.COMMENT)
 
-    @_('FOR var_assign TO expr THEN statement')
-    def statement(self, p):
-        return ('for_loop', ('for_loop_setup', p.var_assign, p.expr), p.statement)
-
-    @_('IF condition THEN statement ELSE statement')
-    def statement(self, p):
-        return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
-
-    # @_('IF "(" condition ")" "[" statement "]"')
+    # @_('FOR var_assign TO expr THEN statement')
     # def statement(self, p):
-    #     return ('if_stmt', p.condition, ('branch', p.statement))
+    #     return ('for_loop', ('for_loop_setup', p.var_assign, p.expr), p.statement)
+
+    # @_('IF condition THEN statement ELSE statement')
+    # def statement(self, p):
+    #     return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
+
+    @_('IF "(" TRUE ")" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.TRUE, [p.statement])
+
+    @_('IF "(" FALSE ")" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.FALSE, [p.statement])
 
 
+    @_('IF "(" expr ")" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, [p.statement])
+
+    @_('IF "(" expr ")" "[" statements "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, p.statements)
+
+    @_('statement statement')
+    def statements(self, p):
+        return ('statement_list', [p.statement0, p.statement1])
+
+    @_('statements statement')
+    def statements(self, p):
+        return ('statement_list', p.statements.append() + [p.statement])
 
 
 
@@ -52,7 +71,7 @@ class BasicParser(Parser):
     def expr(self, p):
         return ('var', p.NAME)
 
-    @_('expr')
+    @_('expr ";"')
     def statement(self, p):
         return (p.expr)
 
@@ -74,6 +93,18 @@ class BasicParser(Parser):
         return ('bool', p.FALSE)
 
 
+    @_('NAME "," NAME')
+    def paramsFunction(self, p):
+        return [p.NAME0, p.NAME1]
+
+    @_('paramsFunction "," NAME')
+    def paramsFunction(self, p):
+        lista = []
+        for i in p.paramsFunction:
+            lista.append(i)
+        lista.append(p.NAME)
+        return lista
+
     @_('expr "," expr')
     def params(self, p):
         return [p.expr0, p.expr1]
@@ -88,26 +119,22 @@ class BasicParser(Parser):
 
 
 
+
     #Definicion de funciones para la declaracion de variables
     @_('var_assign')
     def statement(self, p):
         return p.var_assign
 
-    @_('NAME "=" expr')
-    def var_assign(self, p):
+    @_('NAME "=" expr ";"')
+    def statement(self, p):
         return ('var_assign', p.NAME, p.expr)
 
-    @_('DEF "(" NAME "," expr ")"')
-    def var_assign(self, p):
+    @_('DEF "(" NAME "," expr ")" ";"')
+    def statement(self, p):
         return ('var_assign', p.NAME, p.expr)
 
-    @_('NAME "=" STRING')
-    def var_assign(self, p):
-        return ('var_assign', p.NAME, p.STRING)
-
-
-    @_('PUT "(" NAME "," expr ")"')
-    def var_assign(self, p):
+    @_('PUT "(" NAME "," expr ")" ";"')
+    def statement(self, p):
         return ('NewVar_assign', p.NAME, p.expr)
 
 
@@ -121,28 +148,30 @@ class BasicParser(Parser):
     @_('PARA NAME "[" NAME "]"')
     def statement(self, p):
         print(p.NAME1)
-        return ('fun_def', p.NAME0, p.NAME1)
+        return ('fun_def', p.NAME0, [p.NAME1])
 
-    @_('PARA NAME "[" params "]"')
+    @_('PARA NAME "[" paramsFunction "]"')
     def statement(self, p):
-        return ('fun_def', p.NAME, p.params)
+        return ('fun_def', p.NAME, p.paramsFunction)
 
     @_('FIN')
     def expr(self, p):
         return ('Fin', 1)
 
 
-    @_('NAME "(" ")"')
+    @_('NAME "(" ")" ";"')
     def statement(self, p):
         return ('fun_call', p.NAME)
 
-    @_('NAME "(" NAME ")"')
+    @_('NAME "(" expr ")"  ";"')
     def statement(self, p):
-        return ('fun_call', p.NAME0, p.NAME1)
+        return ('fun_call', p.NAME, [p.expr])
 
-    @_('NAME "(" params ")"')
+    @_('NAME "(" params ")"  ";"')
     def statement(self, p):
         return ('fun_call', p.NAME, p.params)
+
+
 
 
 
@@ -236,14 +265,14 @@ class BasicParser(Parser):
         print('Error: La cantidad de parametros no es correcta')
 
     @_('EQUAL "(" params ")"')
-    def var_assign(self, p):
+    def expr(self, p):
         if len(p.params) == 2:
             return ('Equal', p.params[0], p.params[1])
         print('Error: La cantidad de parametros no es correcta')
 
     @_('expr EQEQ expr')
-    def condition(self, p):
-        return ('condition_eqeq', p.expr0, p.expr1)
+    def expr(self, p):
+        return ('Equal', p.expr0, p.expr1)
 
     @_('AND "(" params ")"')
     def var_assign(self, p):
@@ -266,6 +295,71 @@ class BasicParser(Parser):
     @_('RANDOM "(" expr ")"')
     def expr(self, p):
         return ('Random', p.expr)
+
+
+    #Definición para la función de imprimir
+
+    @_('STRING')
+    def string(self, p):
+        return ('String', p.STRING)
+
+    @_('PRINT "(" paramsPrint ")" ";"')
+    def statement (self, p):
+        return ('Print', p.paramsPrint)
+
+    @_('PRINT "(" expr ")" ";"')
+    def statement (self, p):
+        return ('Print', [p.expr])
+
+    @_('PRINT "(" string ")" ";"')
+    def statement (self, p):
+        return ('Print', p.string)
+
+
+    @_('params')
+    def paramsPrint (self, p):
+        return (p.params)
+
+    @_('paramsPrint "," paramsPrint')
+    def paramsPrint (self, p):
+        return (p.paramsPrint0 , p.paramsPrint1)
+
+
+    @_('string "," expr')
+    def paramsPrint (self, p):
+        return ([p.string, p.expr])
+
+    @_('expr "," string')
+    def paramsPrint (self, p):
+        return ([p.expr, p.string])
+
+    @_('string "," string')
+    def paramsPrint (self, p):
+        return ([p.string0, p.string1])
+
+
+    @_('paramsPrint "," expr')
+    def paramsPrint (self, p):
+        return (p.paramsPrint.append(p.expr))
+
+    @_('expr "," paramsPrint')
+    def paramsPrint (self, p):
+        return ([p.expr] + p.paramsPrint)
+
+
+    @_('paramsPrint "," string')
+    def paramsPrint (self, p):
+        return (p.paramsPrint.append(p.string))
+
+    @_('string "," paramsPrint')
+    def paramsPrint (self, p):
+        return ([p.string] + p.paramsPrint)
+
+
+
+
+
+
 
 
 

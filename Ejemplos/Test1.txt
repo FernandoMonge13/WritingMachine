@@ -1,0 +1,5 @@
+PARA funcion [ xxx , rrr , ttt ]
+xxx * rrr * ttt
+FIN
+
+funcion ( 1 , 2 , 3 )

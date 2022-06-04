@@ -2,25 +2,22 @@ from sly import Lexer
 
 class BasicLexer(Lexer):
 
-    tokens = {NAME, NUMBER, STRING, IF, THEN, ELSE, FOR, PARA, TO, EQEQ,
+    tokens = {NAME, NUMBER, STRING, IF, IFELSE, PARA, EQEQ,
               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
-              AND, OR, GREATER, SMALLER, FIN, COMMENT}
+              AND, OR, GREATER, SMALLER, FIN, COMMENT, PRINT}
     ignore = '\t '
 
-    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
+    literals = {'=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
 
     #Tokens
     #Las siguentes son todas expresiones regulares
     # PARAMETROS = r'([a-zA-Z0-9_@]{2,9},\s?)+'
     # PARAMETROS = r'\[\s*([a-zA-Z0-9_@]{2,9})(,(\s?)*[a-zA-Z0-9_@]{2,9})+\s*\]'
 
-    IF = r'IF'
-    THEN = r'THEN'
-    ELSE = r'ELSE'
-    FOR = r'FOR'
+    IF = r'If'
+    IFELSE = r'ELSE'
     PARA = r'PARA'
     FIN = r'FIN'
-    TO = r'TO'
     NAME = r'[a-z][a-zA-Z0-9_@]{2,9}'
     STRING = r'\".*?\"'
 
@@ -45,6 +42,7 @@ class BasicLexer(Lexer):
     OR = r'Or'
 
     COMMENT = r'//.*'
+    PRINT = r'PrintLine'
 
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')
