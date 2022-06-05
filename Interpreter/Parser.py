@@ -21,23 +21,11 @@ class BasicParser(Parser):
     def __init__(self):
         self.env = { }
 
-    #Si la entrada es vacia, simplemente se ignora
-    @_('')
-    def statement(self, p):
-        pass
-
-    @_('COMMENT')
-    def statement(self, p):
-        return ('Comment', p.COMMENT)
-
     # @_('FOR var_assign TO expr THEN statement')
     # def statement(self, p):
     #     return ('for_loop', ('for_loop_setup', p.var_assign, p.expr), p.statement)
 
-    # @_('IF condition THEN statement ELSE statement')
-    # def statement(self, p):
-    #     return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
-
+    # Definicion de condicionales
     @_('IF "(" TRUE ")" "[" statement "]" ";"')
     def statement(self, p):
         return ('if_stmt', p.TRUE, [p.statement])
@@ -55,13 +43,62 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('if_stmt', p.expr, p.statements)
 
+    @_('IFELSE "(" expr ")" "[" statement "]" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, p.statement0, p.statement1)
+
+    @_('IFELSE "(" expr ")" "[" statements "]" "[" statements "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, p.statements0, p.statements1)
+
+    @_('IFELSE "(" expr ")" "[" statements "]" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, p.statements, p.statement)
+
+    @_('IFELSE "(" expr ")" "[" statement "]" "[" statements "]" ";"')
+    def statement(self, p):
+        return ('if_stmt', p.expr, p.statement, p.statements)
+
+
+    #Definicion para while
+    @_('WHILE "[" expr "]" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('while_stmt', p.expr, [p.statement])
+
+    @_('WHILE "[" expr "]" "[" statements "]" ";"')
+    def statement(self, p):
+        return ('while_stmt', p.expr, p.statements)
+
+    #Definicion para until
+    @_('UNTIL "[" expr "]" "[" statement "]" ";"')
+    def statement(self, p):
+        return ('until_stmt', p.expr, [p.statement])
+
+    @_('UNTIL "[" expr "]" "[" statements "]" ";"')
+    def statement(self, p):
+        return ('until_stmt', p.expr, p.statements)
+
+
+    # Definicion de statements
     @_('statement statement')
     def statements(self, p):
+        # print(p.statement0, p.statement1)
         return ('statement_list', [p.statement0, p.statement1])
 
     @_('statements statement')
     def statements(self, p):
-        return ('statement_list', p.statements.append() + [p.statement])
+        # print("\n",1, p.statements[1] + [p.statement], "\n")
+        return ('statement_list', p.statements[1] + [p.statement])
+
+    @_('COMMENT statement')
+    def statement(self, p):
+        # print(2)
+        return ('statement', p.statement)
+
+    @_('COMMENT statements')
+    def statement(self, p):
+        return  p.statements
+
 
 
 
@@ -139,29 +176,50 @@ class BasicParser(Parser):
 
 
 
+    #Definicion para la funcion MAIN
+    @_('PARA MAIN "[" "]" statements FIN')
+    def statement(self, p):
+        return ('fun_def', p.MAIN, [], p.statements)
+
+    @_('PARA MAIN "[" "]" statement FIN')
+    def statement(self, p):
+        return ('fun_def', p.MAIN, [], ('statement_list',[p.statements]))
 
     #Definicion de funciones para la declaracion de funciones
-    @_('PARA NAME "[" "]"')
+    @_('PARA NAME "[" "]"  statements FIN')
     def statement(self, p):
-        return ('fun_def', p.NAME)
+        return ('fun_def', p.NAME, [], p.statements)
 
-    @_('PARA NAME "[" NAME "]"')
+    @_('PARA NAME "[" NAME "]" statements FIN')
     def statement(self, p):
-        print(p.NAME1)
-        return ('fun_def', p.NAME0, [p.NAME1])
+        return ('fun_def', p.NAME0, [p.NAME1], p.statements)
 
-    @_('PARA NAME "[" paramsFunction "]"')
+    @_('PARA NAME "[" paramsFunction "]" statements FIN')
     def statement(self, p):
-        return ('fun_def', p.NAME, p.paramsFunction)
+        return ('fun_def', p.NAME, p.paramsFunction, p.statements)
 
-    @_('FIN')
-    def expr(self, p):
-        return ('Fin', 1)
+    @_('PARA NAME "[" "]"  statement FIN')
+    def statement(self, p):
+        return ('fun_def', p.NAME, [], ('statement_list',[p.statement]))
+
+    @_('PARA NAME "[" NAME "]" statement FIN')
+    def statement(self, p):
+        return ('fun_def', p.NAME0, [p.NAME1], ('statement_list',[p.statement]))
+
+    @_('PARA NAME "[" paramsFunction "]" statement FIN')
+    def statement(self, p):
+        return ('fun_def', p.NAME, p.paramsFunction, ('statement_list',[p.statement]))
+
+
+    @_('MAIN "(" ")" ";"')
+    def statement(self, p):
+        return ('fun_call', p.MAIN, [])
 
 
     @_('NAME "(" ")" ";"')
     def statement(self, p):
-        return ('fun_call', p.NAME)
+        return ('fun_call', p.NAME, [])
+
 
     @_('NAME "(" expr ")"  ";"')
     def statement(self, p):
@@ -192,12 +250,12 @@ class BasicParser(Parser):
             return ('sum', p.params[0], p.params[1])
         print('Error: La cantidad de parametros no es correcta')
 
-    @_('ADD "(" NAME ")"')
-    def var_assign(self, p):
+    @_('ADD "(" NAME ")" ";"')
+    def statement(self, p):
         return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), ('num', 1)))
 
-    @_('ADD "(" NAME "," expr ")"')
-    def var_assign(self, p):
+    @_('ADD "(" NAME "," expr ")" ";"')
+    def statement(self, p):
         return ('NewVar_assign', p.NAME, ('sum', ('var', p.NAME), p.expr))
 
 

@@ -1,14 +1,16 @@
-aaa=3
-bbb=5
+// coment
 
-Sum(aaa,bbb)
+aaa=3;
+bbb=5;
 
-aaa+bbb
+Sum(aaa,bbb);
+
+aaa+bbb;
 
 
 PARA funcion []
-fff=4
-fff
+fff=4;
+fff;
 FIN
 
-funcion()
+funcion();

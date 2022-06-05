@@ -1,0 +1,10 @@
+//Comentario de prueba
+
+PARA funcion[xxx,ccc,vvv]
+
+Sum(xxx,ccc); 
+Mult(4,5);
+
+FIN
+
+funcion(1,2,3);

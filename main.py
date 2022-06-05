@@ -150,7 +150,57 @@ class MainWindow(QMainWindow):
                 f.write(codeInput.toPlainText())
 
     def run(self, codeInput):
-        print("Run")
+        t1 = threading.Thread(target=self.run_thread, args=(codeInput.toPlainText(),))
+        t1.start()
+
+    def run_thread(self, codeInput):
+        # lexer = BasicLexer()
+        # env = {}
+        #
+        # text = codeInput
+        #
+        # if text:
+        #     lex = lexer.tokenize(text)
+        #     try:
+        #         for token in lex:
+        #             print(token)
+        #     except EOFError:
+        #         print("EOF")
+
+
+
+        # lexer = BasicLexer()
+        # parser = BasicParser()
+        # env = {}
+        #
+        # text = codeInput
+        #
+        # if text:
+        #     tree = parser.parse(lexer.tokenize(text))
+        #     print(tree)
+
+
+
+        lexer = BasicLexer()
+        parser = BasicParser()
+        varDictionary = {}
+        funDictionary = {}
+
+        execute = BasicExecute(varDictionary, funDictionary)
+        lastTree = None
+
+        if "MAIN();" in codeInput:
+            text = codeInput
+        else:
+            text = codeInput + "\n" + "MAIN();"
+
+        if text:
+            tree = parser.parse(lexer.tokenize(text))
+            execute.startExecute(tree, lastTree, varDictionary, funDictionary)
+            lastTree = tree
+
+
+
 
     def stop(self, codeInput):
         print("Stop")
@@ -193,6 +243,7 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     app.exec_()
+
 
     #actions.
     # actions = machine.Hardware()

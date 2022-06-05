@@ -3,23 +3,30 @@ from sly import Lexer
 class BasicLexer(Lexer):
 
     tokens = {NAME, NUMBER, STRING, IF, IFELSE, PARA, EQEQ,
-              SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT, TRUE, FALSE, EQUAL,
-              AND, OR, GREATER, SMALLER, FIN, COMMENT, PRINT}
+              SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT,
+              TRUE, FALSE, EQUAL, AND, OR, GREATER, SMALLER,
+              FIN, COMMENT, PRINT, WHILE, UNTIL, MAIN}
     ignore = '\t '
 
-    literals = {'=', '+', '-', '/', '*', '(', ')', ',', ';' , '[', ']', '<', '>'}
+    literals = {'=', '+', '-', '/', '*', '(', ')', ',', ';', '[', ']', '<', '>'}
 
     #Tokens
     #Las siguentes son todas expresiones regulares
     # PARAMETROS = r'([a-zA-Z0-9_@]{2,9},\s?)+'
     # PARAMETROS = r'\[\s*([a-zA-Z0-9_@]{2,9})(,(\s?)*[a-zA-Z0-9_@]{2,9})+\s*\]'
 
+
+    IFELSE = r'IfElse'
     IF = r'If'
-    IFELSE = r'ELSE'
     PARA = r'PARA'
     FIN = r'FIN'
     NAME = r'[a-z][a-zA-Z0-9_@]{2,9}'
     STRING = r'\".*?\"'
+
+    MAIN = r'MAIN'
+
+    WHILE = r'While'
+    UNTIL = r'Until'
 
     TRUE = r'TRUE'
     FALSE = r'FALSE'

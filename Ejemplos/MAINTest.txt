@@ -1,0 +1,15 @@
+// Comentario
+
+PARA MAIN []
+
+Def(aaa,3);
+PrintLine(aaa);
+funcion1();
+
+FIN
+
+PARA funcion1[]
+
+PrintLine("Hola");
+
+FIN
