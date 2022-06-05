@@ -5,7 +5,6 @@ PARA MAIN []
 Repeat 4 [
 
 PrintLine(100);
-PrintLine(150);
 
 ];
 

@@ -1,9 +1,12 @@
 from Interpreter.Lexer import BasicLexer
 from Interpreter.Parser import BasicParser
 import random
+import Hardware.Hardware as machine
+
 
 
 class BasicExecute:
+    # actions = machine.Hardware()
 
     instructionsFunction = []
     paramsFunction = {}
@@ -212,23 +215,60 @@ class BasicExecute:
             while self.walkTree(node[1]) == 'FALSE':
                 self.walkTree(node[2])
 
+        if node[0] == 'repeat_stmt':
+            for i in range(int(self.walkTree(node[1]))):
+                self.walkTree(node[2])
 
-        if node[0] == 'for_loop':
-            if node[1][0] == 'for_loop_setup':
-                loop_setup = self.walkTree(node[1])
 
-                loop_count = self.varDictionary[loop_setup[0]]
-                loop_limit = loop_setup[1]
+        #A partir de aqui, cosas de Hardware
 
-                for i in range(loop_count+1, loop_limit+1):
-                    res = self.walkTree(node[2])
-                    if res is not None:
-                        print(res)
-                    self.varDictionary[loop_setup[0]] = i
-                del self.varDictionary[loop_setup[0]]
 
-        if node[0] == 'for_loop_setup':
-            return (self.walkTree(node[1]), self.walkTree(node[2]))
+        if node[0] == 'UseColor':
+            if node[1] == 1:
+                print("Usando color 1")
+            elif node[1] == 2:
+                print("Usando color 2")
+
+        if node[0] == 'ContinueUp':
+            print("Continuando hacia arriba")
+
+        if node[0] == 'ContinueDown':
+            print("Continuando hacia abajo")
+
+        if node[0] == 'ContinueLeft':
+            print("Continuando hacia izquierda")
+
+        if node[0] == 'ContinueRight':
+            print("Continuando hacia derecha")
+
+        if node[0] == 'Pos':
+            print("Posicion x: ", node[1])
+            print("Posicion y: ", node[2])
+
+        if node[0] == 'PosX':
+            print("Posicion x: ", node[1])
+
+        if node[0] == 'PosY':
+            print("Posicion y: ", node[1])
+
+        if node[0] == 'Down':
+            print("Bajando")
+
+        if node[0] == 'Up':
+            print("Subiendo")
+
+        if node[0] == 'Beginning':
+            print("Iniciando")
+
+        if node[0] == 'Speed':
+            print("Velocidad: ", node[1])
+
+
+
+        if node[0] == 'Run':
+            print("Corriendo", node[1])
+
+
 
 
 

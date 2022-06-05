@@ -5,7 +5,10 @@ class BasicLexer(Lexer):
     tokens = {NAME, NUMBER, STRING, IF, IFELSE, PARA, EQEQ,
               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT,
               TRUE, FALSE, EQUAL, AND, OR, GREATER, SMALLER,
-              FIN, COMMENT, PRINT, WHILE, UNTIL, MAIN}
+              FIN, COMMENT, PRINT, WHILE, UNTIL, MAIN, USECOLOR,
+              CONTINUEUP, CONTINUEDOWN, CONTINUELEFT, CONTINUERIGHT,
+              POS, POSX, POSY, DOWN, UP, BEGINNING, SPEED, RUN,
+              REPEAT}
     ignore = '\t '
 
     literals = {'=', '+', '-', '/', '*', '(', ')', ',', ';', '[', ']', '<', '>'}
@@ -27,6 +30,7 @@ class BasicLexer(Lexer):
 
     WHILE = r'While'
     UNTIL = r'Until'
+    REPEAT = r'Repeat'
 
     TRUE = r'TRUE'
     FALSE = r'FALSE'
@@ -50,6 +54,27 @@ class BasicLexer(Lexer):
 
     COMMENT = r'//.*'
     PRINT = r'PrintLine'
+
+    CONTINUEUP = r'ContinueUp'
+    CONTINUEDOWN = r'ContinueDown'
+    CONTINUERIGHT = r'ContinueRight'
+    CONTINUELEFT = r'ContinueLeft'
+    POS = r'Pos'
+    POSX = r'PosX'
+    POSY = r'PosY'
+    USECOLOR = r'UseColor'
+    DOWN = r'Down'
+    UP = r'Up'
+    BEGINNING = r'Beginning'
+    SPEED = r'Speed'
+    RUN = r'Run'
+
+
+
+
+
+
+
 
     #r'\d+' : expresion regular para uno o mas digitos
     @_(r'\d+')

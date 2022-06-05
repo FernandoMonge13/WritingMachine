@@ -78,6 +78,16 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('until_stmt', p.expr, p.statements)
 
+    #Definicion para repeat
+    @_('REPEAT expr "[" statement "]" ";"')
+    def statement(self, p):
+        return ('repeat_stmt', p.expr, ('statement_list', [p.statement]) )
+
+    @_('REPEAT expr "[" statements "]" ";"')
+    def statement(self, p):
+        return ('repeat_stmt', p.expr, p.statements)
+
+
 
     # Definicion de statements
     @_('statement statement')
@@ -183,7 +193,7 @@ class BasicParser(Parser):
 
     @_('PARA MAIN "[" "]" statement FIN')
     def statement(self, p):
-        return ('fun_def', p.MAIN, [], ('statement_list',[p.statements]))
+        return ('fun_def', p.MAIN, [], ('statement_list',[p.statement]))
 
     #Definicion de funciones para la declaracion de funciones
     @_('PARA NAME "[" "]"  statements FIN')
@@ -413,6 +423,60 @@ class BasicParser(Parser):
     def paramsPrint (self, p):
         return ([p.string] + p.paramsPrint)
 
+
+
+    #Definiciones para la parte de Hardware
+    @_('USECOLOR expr ";"')
+    def statement(self, p):
+        return ('UseColor', p.expr)
+
+    @_('CONTINUEUP expr ";"')
+    def statement(self, p):
+        return ('ContinueUp', p.expr)
+
+    @_('CONTINUEDOWN expr ";"')
+    def statement(self, p):
+        return ('ContinueDown', p.expr)
+
+    @_('CONTINUELEFT expr ";"')
+    def statement(self, p):
+        return ('ContinueLeft', p.expr)
+
+    @_('CONTINUERIGHT expr ";"')
+    def statement(self, p):
+        return ('ContinueRight', p.expr)
+
+    @_('POS "(" expr "," expr ")" ";"')
+    def statement(self, p):
+        return ('Pos', p.expr0, p.expr1)
+
+    @_('POSX expr ";"')
+    def statement(self, p):
+        return ('PosX', p.expr)
+
+    @_('POSY expr ";"')
+    def statement(self, p):
+        return ('PosY', p.expr)
+
+    @_('DOWN')
+    def statement(self, p):
+        return ('Down')
+
+    @_('UP')
+    def statement(self, p):
+        return ('Up')
+
+    @_('BEGINNING')
+    def statement(self, p):
+        return ('Beginning')
+
+    @_('SPEED expr ";"')
+    def statement(self, p):
+        return ('Speed', p.expr)
+
+    @_('RUN "[" statements "]" ";"')
+    def statement(self, p):
+        return ('Run', p.statements)
 
 
 
