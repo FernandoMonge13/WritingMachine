@@ -2,12 +2,7 @@
 
 PARA MAIN []
 
-Repeat 4 [
-
-PrintLine(100);
-PrintLine(150);
-
-];
-
+PrintLine("DDDDD");
+Up;
 FIN
 

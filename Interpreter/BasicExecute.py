@@ -6,7 +6,7 @@ import Hardware.Hardware as machine
 
 
 class BasicExecute:
-    # actions = machine.Hardware()
+    actions = machine.Hardware()
 
     instructionsFunction = []
     paramsFunction = {}
@@ -224,52 +224,78 @@ class BasicExecute:
 
 
         if node[0] == 'UseColor':
-            if node[1] == 1:
-                print("Usando color 1")
-            elif node[1] == 2:
-                print("Usando color 2")
+
+            if self.walkTree(node[1]) == 1:
+                self.actions.down_black()
+            elif self.walkTree(node[1]) == 2:
+                self.actions.down_blue()
 
         if node[0] == 'ContinueUp':
-            print("Continuando hacia arriba")
+
+            if (self.actions.y + self.walkTree(node[1])) <= 10:
+                for i in range(self.actions.y, self.actions.y + int(self.walkTree(node[1]))):
+                    self.actions.y_plus()
+
+                self.actions.y += int(self.walkTree(node[1]))
+            else:
+                print("Error: ContinueUp fuera de rango")
 
         if node[0] == 'ContinueDown':
-            print("Continuando hacia abajo")
+            if (self.actions.y - self.walkTree(node[1])) >= 1:  #5    3
+                aux =  self.actions.y
+                while aux > self.actions.y - int(self.walkTree(node[1])):
+                    self.actions.y_minus()
+                    aux-=1
+                self.actions.y = aux
+            else:
+                print("Error: ContinueDown fuera de rango")
 
         if node[0] == 'ContinueLeft':
-            print("Continuando hacia izquierda")
+
+            if (self.actions.x - self.walkTree(node[1])) >= 1:
+                aux = self.actions.x
+                while aux > self.actions.x - int(self.walkTree(node[1])):
+                    self.actions.x_minus()
+                    print("LEFT")
+                    aux -= 1
+                self.actions.x = aux
+            else:
+                print("Error: ContinueDown fuera de rango")
 
         if node[0] == 'ContinueRight':
-            print("Continuando hacia derecha")
+
+            if (self.actions.x + self.walkTree(node[1])) <= 9:
+                for i in range(self.actions.x, self.actions.x + int(self.walkTree(node[1]))):
+                    self.actions.x_plus()
+
+                self.actions.x += int(self.walkTree(node[1]))
+                print(self.actions.x)
+            else:
+                print("Error: ContinueRight fuera de rango")
 
         if node[0] == 'Pos':
-            print("Posicion x: ", node[1])
-            print("Posicion y: ", node[2])
+            self.actions.x_movement(int(self.walkTree(node[1])))
+            self.actions.y_movement(int(self.walkTree(node[2])))
 
         if node[0] == 'PosX':
-            print("Posicion x: ", node[1])
+            self.actions.x_movement(int(self.walkTree(node[1])))
 
         if node[0] == 'PosY':
-            print("Posicion y: ", node[1])
+            self.actions.y_movement(int(self.walkTree(node[1])))
 
         if node[0] == 'Down':
-            print("Bajando")
+            self.actions.down_black()
 
         if node[0] == 'Up':
-            print("Subiendo")
+
+            self.actions.up()
 
         if node[0] == 'Beginning':
-            print("Iniciando")
+            self.actions.x_movement(1)
+            self.actions.y_movement(1)
 
         if node[0] == 'Speed':
-            print("Velocidad: ", node[1])
-
-
-
-        if node[0] == 'Run':
-            print("Corriendo", node[1])
-
-
-
+            self.actions.set_speed(int(self.walkTree(node[1])))
 
 
 if __name__ == '__main__':

@@ -102,12 +102,13 @@ class BasicParser(Parser):
 
     @_('COMMENT statement')
     def statement(self, p):
-        # print(2)
+        print(p.statement)
         return ('statement', p.statement)
 
     @_('COMMENT statements')
     def statement(self, p):
-        return  p.statements
+        print(p.statements)
+        return p.statements
 
 
 
@@ -238,10 +239,6 @@ class BasicParser(Parser):
     @_('NAME "(" params ")"  ";"')
     def statement(self, p):
         return ('fun_call', p.NAME, p.params)
-
-
-
-
 
 
 
@@ -458,17 +455,17 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('PosY', p.expr)
 
-    @_('DOWN')
+    @_('DOWN ";"')
     def statement(self, p):
-        return ('Down')
+        return ('Down',1)
 
-    @_('UP')
+    @_('UP ";"')
     def statement(self, p):
-        return ('Up')
+        return ('Up', 1)
 
-    @_('BEGINNING')
+    @_('BEGINNING ";"')
     def statement(self, p):
-        return ('Beginning')
+        return ('Beginning', 1)
 
     @_('SPEED expr ";"')
     def statement(self, p):
@@ -476,18 +473,7 @@ class BasicParser(Parser):
 
     @_('RUN "[" statements "]" ";"')
     def statement(self, p):
-        return ('Run', p.statements)
-
-
-
-
-
-
-
-
-
-
-
+        return ('statement_list', p.statements)
 
 
 

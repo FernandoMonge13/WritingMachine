@@ -175,6 +175,11 @@ class MainWindow(QMainWindow):
         #
         # text = codeInput
         #
+        #
+        # text = codeInput + "\n" + "MAIN();"
+        #
+        # text = text + "\n" + "Up;" + "\n"+"Beginning;"
+        #
         # if text:
         #     tree = parser.parse(lexer.tokenize(text))
         #     print(tree)
@@ -193,6 +198,7 @@ class MainWindow(QMainWindow):
             text = codeInput
         else:
             text = codeInput + "\n" + "MAIN();"
+        text = text + "\n" + "Up;" + "\n" + "Beginning;"
 
         if text:
             tree = parser.parse(lexer.tokenize(text))
@@ -243,7 +249,3 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     app.exec_()
-
-
-    #actions.
-    # actions = machine.Hardware()

@@ -20,6 +20,9 @@ class Hardware:
         self.current_time_xminus = 0.54
         self.current_time_diagonal = 0.65
 
+        self.x = 1
+        self.y = 1
+
         self.speed = 1
 
     """
@@ -199,6 +202,7 @@ class Hardware:
     Provide movements on Y- 
     """
     def y_minus(self):
+
         self.movement.digital_write(2, 1)
         self.movement.digital_write(3, 0)
 
@@ -227,6 +231,7 @@ class Hardware:
     Provide movements on X- 
     """
     def x_minus(self):
+
         self.movement.digital_write(4, 1)
         self.movement.digital_write(5, 0)
 
@@ -238,11 +243,60 @@ class Hardware:
         time.sleep(self.speed)
 
     """
+    This method moves to an x cord
+    :param pos: x cord
+    """
+    def x_movement(self, pos):
+        aux = pos - self.x
+        if 1 <= pos <= 9 and aux > 0:
+            if (self.x + aux) <= 9:
+                for i in range(self.x, self.x + aux):
+                    self.x_plus()
+                self.x += aux
+            else:
+                print("Error: PosX fuera de rango")
+
+        elif 1 <= pos <= 9 and aux < 0:
+            if (self.x + aux) >= 1:
+                aux2 = self.x
+                while aux2 > (self.x + aux):
+                    self.x_minus()
+                    print("LEFT")
+                    aux2 -= 1
+                self.x = aux2
+            else:
+                print("Error: PosX fuera de rango")
+
+    """
+    This method moves to an y cord
+    :param pos: y cord
+    """
+    def y_movement(self, pos):
+        aux = pos - self.y
+        if 1 <= pos <= 10 and aux > 0:
+            if (self.y + aux) <= 10:
+                for i in range(self.y, self.y + aux):
+                    self.y_plus()
+                self.y += aux
+            else:
+                print("Error: PosY fuera de rango")
+
+        elif 1 <= pos <= 10 and aux < 0:
+            if (self.y + aux) >= 1:
+                aux2 = self.y
+                while aux2 > (self.y + aux):
+                    self.y_minus()
+                    aux2 -= 1
+                self.y = aux2
+            else:
+                print("Error: PosY fuera de rango")
+
+    """
     Method used control the drawing speed
     """
     def set_speed(self, speed):
         if 1 <= speed <= 5:
-            self.speed = speed
+            self.speed = 6-speed
         else:
             print("Speed most be ->  1 <= speed <= 5 ")
 
