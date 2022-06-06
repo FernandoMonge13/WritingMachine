@@ -1,0 +1,15 @@
+//PN
+PARA MAIN []
+
+Def(aaa,2);
+UseColor 2;
+PosY 4;
+PosX 2;
+PosY 3;
+PosX 1;
+Up;
+
+Beginning;
+
+FIN
+

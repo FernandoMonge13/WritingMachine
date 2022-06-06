@@ -109,6 +109,7 @@ class BasicExecute:
 
         if node[0] == 'statement_list':
             for i in node[1]:
+                print(i)
                 self.walkTree(i)
 
         if node[0] == 'fun_def':
@@ -166,27 +167,67 @@ class BasicExecute:
 
 
         if node[0] == 'sum':
+            print(f"Entra a la suma y los tipos de variables son {type(self.walkTree(node[1]))} y {type(self.walkTree(node[2]))}")
             if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) + self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) + self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) + self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
                 return self.walkTree(node[1]) + self.walkTree(node[2])
             else:
                 self.errores.append("Error: Suma solo acepta valores numericos")
         elif node[0] == 'sub':
             if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), float):
                 return self.walkTree(node[1]) - self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) - self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) - self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) - self.walkTree(node[2])
             else:
                 self.errores.append("Error: Resta solo acepta valores numericos")
         elif node[0] == 'mul':
             if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) * self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) * self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) * self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
                 return self.walkTree(node[1]) * self.walkTree(node[2])
             else:
                 self.errores.append("Error: Multiplicacion solo acepta valores numericos")
         elif node[0] == 'div':
             if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), float):
                 return self.walkTree(node[1]) / self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                return self.walkTree(node[1]) / self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) / self.walkTree(node[2])
+            elif isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
+                return self.walkTree(node[1]) / self.walkTree(node[2])
             else:
                 self.errores.append("Error: Division solo acepta valores numericos")
         elif node[0] == 'Greater':
             if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), float):
+                if self.walkTree(node[1]) > self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
+            if isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                if self.walkTree(node[1]) > self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
+            if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                if self.walkTree(node[1]) > self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
+            if isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
                 if self.walkTree(node[1]) > self.walkTree(node[2]):
                     return "TRUE"
                 else:
@@ -199,16 +240,33 @@ class BasicExecute:
                     return "TRUE"
                 else:
                     return "FALSE"
+            if isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), float):
+                if self.walkTree(node[1]) < self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
+            if isinstance(self.walkTree(node[1]), float) and isinstance(self.walkTree(node[2]), int):
+                if self.walkTree(node[1]) < self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
+            if isinstance(self.walkTree(node[1]), int) and isinstance(self.walkTree(node[2]), int):
+                if self.walkTree(node[1]) < self.walkTree(node[2]):
+                    return "TRUE"
+                else:
+                    return "FALSE"
             else:
                 self.errores.append("Error: El procedimiento Smaller solo acepta valores numericos")
 
         if node[0] == 'var_assign':
             self.varDictionary[node[1]] = self.walkTree(node[2])
-            # print(self.varDictionary)
+            print(self.varDictionary)
             return node[1]
 
         if node[0] == 'NewVar_assign':
             if(self.varDictionary.keys().__contains__(node[1])):
+                print(f"El nodo es {node}")
+                print(f"Entra a newVarAssing y los nodos son de tipo {type(self.walkTree(node[2]))} y {self.varDictionary[node[1]]} ")
                 if isinstance(self.walkTree(node[2]), float) and isinstance(self.varDictionary[node[1]], float):
                     self.varDictionary[node[1]] = self.walkTree(node[2])
                 elif (self.walkTree(node[2]) == 'TRUE' or self.walkTree(node[2]) == 'FALSE') and (self.varDictionary[node[1]] == 'TRUE' or self.varDictionary[node[1]] == 'FALSE'):
@@ -226,7 +284,7 @@ class BasicExecute:
 
 
         if node[0] == 'Random':
-            if isinstance(self.walkTree(node[1]), float):
+            if isinstance(self.walkTree(node[1]), float) or isinstance(self.walkTree(node[1]), int):
                 if self.walkTree(node[1])%1==0:
                     return random.randint(0, int(self.walkTree(node[1])))
                 else:
@@ -256,6 +314,7 @@ class BasicExecute:
 
 
         if node[0] == 'while_stmt':
+            print(f"Entro al while y el nodo a ejecutar es {node[2]}")
             while self.walkTree(node[1]) == 'TRUE':
                 self.walkTree(node[2])
 
@@ -310,7 +369,6 @@ class BasicExecute:
                     aux = self.actions.x
                     while aux > self.actions.x - int(self.walkTree(node[1])):
                         self.actions.x_minus()
-                        print("LEFT")
                         aux -= 1
                     self.actions.x = aux
                 else:

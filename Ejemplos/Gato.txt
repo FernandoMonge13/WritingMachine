@@ -1,0 +1,38 @@
+//PN
+PARA MAIN []
+
+Def(aaa,2);
+Def(colum,2);
+
+
+UseColor 2;
+
+Repeat colum [
+Up;
+ContinueRight 1;
+UseColor 2;
+ContinueUp 3;
+Up;
+ContinueDown 3;
+
+];
+
+Up;
+Beginning;
+
+Repeat colum [
+Up;
+ContinueUp 1;
+UseColor 2;
+ContinueRight 3;
+Up;
+ContinueLeft 3;
+
+];
+
+
+Up;
+Beginning;
+
+FIN
+

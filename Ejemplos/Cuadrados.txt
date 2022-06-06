@@ -1,0 +1,18 @@
+//PN
+PARA MAIN []
+
+Def(cuadros,4);
+Def(aux,1);
+
+UseColor 2;
+While [aux<cuadros][
+
+Pos(aux+1,aux+1);
+Beginning;
+Add(aux);
+
+];
+
+
+FIN
+

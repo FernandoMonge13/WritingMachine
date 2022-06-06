@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
             text = codeInput
         else:
             text = codeInput + "\n" + "MAIN();"
-        text = text + "\n" + "Up;" + "\n" + "Beginning;"
+        # text = text + "\n" + "Up;" + "\n" + "Beginning;"
 
         if text:
             lexer.limpiarErrores()
@@ -319,5 +319,8 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     app.exec_()
+
+    # hp = machine.Hardware()
+    # hp.x_plus()
 
 

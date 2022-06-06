@@ -3,6 +3,8 @@
 PARA MAIN []
 
 PrintLine("DDDDD");
-Up;
+PosX 2;
+Beginning;
+
 FIN
 

@@ -1,0 +1,16 @@
+//PN
+PARA MAIN []
+
+
+UseColor 2;
+
+
+
+
+
+Up;
+
+Beginning;
+
+FIN
+
