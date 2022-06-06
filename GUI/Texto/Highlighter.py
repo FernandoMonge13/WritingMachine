@@ -5,29 +5,6 @@ from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMenu, QMes
 
 from GUI.Texto.PlainTextEdit import PlainTextEdit
 
-
-class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
-
-        # self.setupFileMenu()
-        self.setupEditor()
-
-        self.setCentralWidget(self.editor)
-        self.setWindowTitle("Syntax Highlighter")
-
-
-    def setupEditor(self):
-        font = QFont()
-        font.setFamily('Courier')
-        font.setFixedPitch(True)
-        font.setPointSize(10)
-
-        self.editor = PlainTextEdit()
-        self.editor.setFont(font)
-
-        self.highlighter = Highlighter(self.editor.document())
-
 class Highlighter(QSyntaxHighlighter):
     def __init__(self, parent=None):
         super(Highlighter, self).__init__(parent)
@@ -102,12 +79,3 @@ class Highlighter(QSyntaxHighlighter):
             startIndex = self.commentStartExpression.indexIn(text,
                     startIndex + commentLength);
 
-if __name__ == '__main__':
-
-    import sys
-
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.resize(640, 512)
-    window.show()
-    sys.exit(app.exec_())

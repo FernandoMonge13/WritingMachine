@@ -1,3 +1,4 @@
+import random
 import sys
 
 import PyQt5
@@ -65,10 +66,10 @@ class MainWindow(QMainWindow):
         abrir.triggered.connect(lambda: self.abrir(codeInput))
         guardar.triggered.connect(lambda: self.guardar(codeInput))
         guardarComo.triggered.connect(lambda: self.guardarComo(codeInput))
-        run.triggered.connect(lambda: self.run(codeInput))
+        run.triggered.connect(lambda: self.run(codeInput, codeOutput))
         stop.triggered.connect(lambda: self.stop(codeInput))
         close.triggered.connect(lambda: self.closeApp(codeInput))
-        compilar.triggered.connect(lambda: self.compilar(codeInput))
+        compilar.triggered.connect(lambda: self.compilar(codeInput, codeOutput))
 
         # Se agrega las acciones creadas a la barra de acciones
         toolBar.addAction(abrir)
@@ -100,6 +101,9 @@ class MainWindow(QMainWindow):
         codeOutput = QPlainTextEdit(self)
         codeOutput.setStyleSheet("background-color: #551641; color: white;")
         codeOutput.setReadOnly(True)
+
+
+
 
         # Se agregan los widgets al layout
         for widget in [codeInput, codeOutput]:
@@ -149,43 +153,107 @@ class MainWindow(QMainWindow):
             with open(fileName, "w") as f:
                 f.write(codeInput.toPlainText())
 
-    def run(self, codeInput):
-        t1 = threading.Thread(target=self.run_thread, args=(codeInput.toPlainText(),))
+    def run(self, codeInput, codeOutput):
+
+        t1 = threading.Thread(target=self.run_thread, args=(codeInput.toPlainText(),codeOutput,))
         t1.start()
 
-    def run_thread(self, codeInput):
-        # lexer = BasicLexer()
-        # env = {}
-        #
-        # text = codeInput
-        #
-        # if text:
-        #     lex = lexer.tokenize(text)
-        #     try:
-        #         for token in lex:
-        #             print(token)
-        #     except EOFError:
-        #         print("EOF")
+
+
+    def run_thread(self, codeInput, codeOutput):
+
+        lexer = BasicLexer()
+        parser = BasicParser()
+        varDictionary = {}
+        funDictionary = {}
+
+        execute = BasicExecute(varDictionary, funDictionary)
+        lastTree = None
 
 
 
-        # lexer = BasicLexer()
-        # parser = BasicParser()
-        # env = {}
-        #
-        # text = codeInput
-        #
-        #
-        # text = codeInput + "\n" + "MAIN();"
-        #
-        # text = text + "\n" + "Up;" + "\n"+"Beginning;"
-        #
-        # if text:
-        #     tree = parser.parse(lexer.tokenize(text))
-        #     print(tree)
+        if "MAIN();" in codeInput:
+            text = codeInput
+        else:
+            text = codeInput + "\n" + "MAIN();"
+        text = text + "\n" + "Up;" + "\n" + "Beginning;"
+
+        if text:
+            lexer.limpiarErrores()
+            lex = lexer.tokenize(text)
+            erroresLexer = lexer.errores
+
+            if len(erroresLexer) == 0:
+                parser.limpiarErrores()
+                tree = parser.parse(lex)
+                erroresParser = parser.errores
+
+                if len(erroresParser) == 0:
+
+                    execute.startExecute(tree, lastTree, varDictionary, funDictionary)
+
+
+                    if len(execute.errores) == 0:
+                        execute.clearExecution()
+                        varDictionary = {}
+                        funDictionary = {}
+
+                        execute.isExecuting=True
+                        execute.startExecute(tree, lastTree, varDictionary, funDictionary)
+
+                        textAux = ""
+                        for i in execute.toPrint:
+                            textAux += i + "\n"
+                        self.mostrarConsola(codeOutput, textAux)
+
+                    else:
+                        textAux = ""
+                        for error in execute.errores:
+                            textAux += error + "\n"
+
+                    self.mostrarConsola(codeOutput, textAux)
+
+
+                else:
+                    textAux = ""
+                    print(f"La cantidad de errores es: {len(erroresParser)}")
+
+                    for error in erroresParser:
+                        textAux += error + "\n"
+
+                    print(f"Los errores son:\n{textAux}")
+                    self.mostrarConsola(codeOutput, textAux)
+
+            else:
+                textAux = ""
+                print(f"La cantidad de errores es: {len(erroresLexer)}")
+
+                for error in erroresLexer:
+                    textAux+= "Error " + error + "\n"
+
+                print(f"Los errores son:\n{textAux}")
+                self.mostrarConsola(codeOutput, textAux)
 
 
 
+
+
+
+
+
+    def stop(self, codeInput):
+        print("Stop")
+
+    def closeApp(self, codeInput):
+        self.close()
+        # print("Close")
+
+    def compilar(self, codeInput, codeOutput):
+
+        t1 = threading.Thread(target=self.compilar_thread, args=(codeInput.toPlainText(), codeOutput,))
+        t1.start()
+
+    def compilar_thread(self, codeInput, codeOutput):
         lexer = BasicLexer()
         parser = BasicParser()
         varDictionary = {}
@@ -201,51 +269,61 @@ class MainWindow(QMainWindow):
         text = text + "\n" + "Up;" + "\n" + "Beginning;"
 
         if text:
-            tree = parser.parse(lexer.tokenize(text))
-            execute.startExecute(tree, lastTree, varDictionary, funDictionary)
-            lastTree = tree
+            lexer.limpiarErrores()
+            lex = lexer.tokenize(text)
+            erroresLexer = lexer.errores
+
+            if len(erroresLexer) == 0:
+                parser.limpiarErrores()
+                tree = parser.parse(lex)
+                erroresParser = parser.errores
+
+                if len(erroresParser) == 0:
+
+                    execute.startExecute(tree, lastTree, varDictionary, funDictionary)
+
+                    if len(execute.errores) == 0:
+                        pass
+
+                    else:
+                        textAux = ""
+                        for error in execute.errores:
+                            textAux += error + "\n"
+
+                        self.mostrarConsola(codeOutput, textAux)
+
+
+                else:
+                    textAux = ""
+                    print(f"La cantidad de errores es: {len(erroresParser)}")
+
+                    for error in erroresParser:
+                        textAux += error + "\n"
+
+                    print(f"Los errores son:\n{textAux}")
+                    self.mostrarConsola(codeOutput, textAux)
+
+            else:
+                textAux = ""
+                print(f"La cantidad de errores es: {len(erroresLexer)}")
+
+                for error in erroresLexer:
+                    textAux += "Error " + error + "\n"
+
+                print(f"Los errores son:\n{textAux}")
+                self.mostrarConsola(codeOutput, textAux)
 
 
 
-
-    def stop(self, codeInput):
-        print("Stop")
-
-    def closeApp(self, codeInput):
-        self.close()
-        # print("Close")
-
-    def compilar(self, codeInput):
-
-        t1 = threading.Thread(target=self.compilar_thread, args=(codeInput.toPlainText(),))
-        t1.start()
-
-    def compilar_thread(self, codeInput):
-        lexer = BasicLexer()
-        parser = BasicParser()
-        varDictionary = {}
-        funDictionary = {}
-
-        execute = BasicExecute(varDictionary, funDictionary)
-        lastTree = None
-
-        text = codeInput
-        textsplit = text.split("\n")
-
-
-        print(textsplit)
-        for line in textsplit:
-            if line:
-                tree = parser.parse(lexer.tokenize(line))
-                execute.startExecute(tree, lastTree, varDictionary, funDictionary)
-                lastTree = tree
-                # lex = lexer.tokenize(text)
-                # for token in lex:
-                #     print(token)
-
+    def mostrarConsola(self, codeOutput, text):
+        codeOutput.clear()
+        codeOutput.insertPlainText(text)
+        # codeOutput.appendPlainText(text)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     app.exec_()
+
+

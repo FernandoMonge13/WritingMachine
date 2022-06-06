@@ -1,6 +1,10 @@
 from sly import Lexer
 
+
 class BasicLexer(Lexer):
+    errores = []
+
+    lineno = 1
 
     tokens = {NAME, NUMBER, STRING, IF, IFELSE, PARA, EQEQ,
               SUMA, MULT, DIV, SUBSTR, RANDOM, ADD, DEF, PUT,
@@ -96,7 +100,7 @@ class BasicLexer(Lexer):
     #r'\n+' : expresion regular para salto de linea
     @_(r'\n+')
     def newline(self,t ):
-        self.lineno = t.value.count('\n')
+        self.lineno += t.value.count('\n')
 
     @_('NAME')
     def expr(self, p):
@@ -107,8 +111,13 @@ class BasicLexer(Lexer):
             return 0
 
     def error(self, t):
-        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        self.errores.append('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        # print(self.errores)
         self.index += 1
+
+    def limpiarErrores(self):
+        self.errores=[]
+
 
 
 if __name__ == '__main__':

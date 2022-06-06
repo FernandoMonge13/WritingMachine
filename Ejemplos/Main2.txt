@@ -1,0 +1,8 @@
+// Comentario
+
+PARA MAIN []
+
+PrintLine("DDDDD");
+PrintLine(Sum(1,1));
+FIN
+

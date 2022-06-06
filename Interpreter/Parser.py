@@ -255,7 +255,7 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('sum', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
     @_('ADD "(" NAME ")" ";"')
     def statement(self, p):
@@ -277,7 +277,7 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('sub', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
 
 
@@ -290,7 +290,7 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('mul', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
 
 
@@ -303,7 +303,7 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('div', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
 
 
@@ -317,7 +317,7 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('Greater', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
     @_('expr "<" expr')
     def expr(self, p):
@@ -327,13 +327,13 @@ class BasicParser(Parser):
     def expr(self, p):
         if len(p.params) == 2:
             return ('Smaller', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
     @_('EQUAL "(" params ")"')
     def expr(self, p):
         if len(p.params) == 2:
             return ('Equal', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
     @_('expr EQEQ expr')
     def expr(self, p):
@@ -343,14 +343,14 @@ class BasicParser(Parser):
     def var_assign(self, p):
         if len(p.params) == 2:
             return ('And', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
 
     @_('OR "(" params ")"')
     def var_assign(self, p):
         if len(p.params) == 2:
             return ('Or', p.params[0], p.params[1])
-        print('Error: La cantidad de parametros no es correcta')
+        self.errores.append('Error: La cantidad de parametros no es correcta')
 
 
 
@@ -475,7 +475,17 @@ class BasicParser(Parser):
     def statement(self, p):
         return ('statement_list', p.statements)
 
+    def error(self, p):
+        self.errores.append(f"Parsing error at token {str(p)}")
+        print(f"Parsing error at token {str(p)}")
 
+    # @_('expr PLUS expr')
+    # def expr(self, p):
+    #     line   = p.lineno      # line number of the PLUS token
+    #     index  = p.index       # Index of the PLUS token in input text
+
+    def limpiarErrores(self):
+        self.errores=[]
 
 if __name__ == '__main__':
     lexer = BasicLexer()
