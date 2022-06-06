@@ -137,10 +137,10 @@ class BasicExecute:
 
                 instructionsAux = []
 
-                print("Funcion llamada: ", node[1])
-                print("Cantidad de parametros ingresados: ", len(node[2]))
-                print("Cantidad de parametros esperados: ", len(self.funDictionary[node[1]][0]))
-                print("Los parametros son iguales: ", len(node[2]) == len(self.funDictionary[node[1]][0]))
+                # print("Funcion llamada: ", node[1])
+                # print("Cantidad de parametros ingresados: ", len(node[2]))
+                # print("Cantidad de parametros esperados: ", len(self.funDictionary[node[1]][0]))
+                # print("Los parametros son iguales: ", len(node[2]) == len(self.funDictionary[node[1]][0]))
 
                 if len(node[2])==len(self.funDictionary[node[1]][0]):
 
@@ -246,8 +246,12 @@ class BasicExecute:
 
         if node[0] == 'Print':
             if self.isExecuting:
-                for i in range(len(node[1])):
-                    self.toPrint.append(print(self.walkTree(node[1][i])))
+                print("HOLAXD",node)
+                # for i in range(len(node[1])):
+                #     self.toPrint.append(self.walkTree(node[1][i]))
+                for i in node[1]:
+                    self.toPrint.append(self.walkTree(i))
+                    print(self.walkTree(i))
 
 
 

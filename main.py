@@ -168,9 +168,8 @@ class MainWindow(QMainWindow):
         funDictionary = {}
 
         execute = BasicExecute(varDictionary, funDictionary)
+        execute.isExecuting = False
         lastTree = None
-
-
 
         if "MAIN();" in codeInput:
             text = codeInput
@@ -189,7 +188,7 @@ class MainWindow(QMainWindow):
                 erroresParser = parser.errores
 
                 if len(erroresParser) == 0:
-
+                    print("XDDDDDDDDD",tree)
                     execute.startExecute(tree, lastTree, varDictionary, funDictionary)
 
 
@@ -200,7 +199,7 @@ class MainWindow(QMainWindow):
 
                         execute.isExecuting=True
                         execute.startExecute(tree, lastTree, varDictionary, funDictionary)
-
+                        print(f"Hay que printear {len(execute.toPrint)}")
                         textAux = ""
                         for i in execute.toPrint:
                             textAux += i + "\n"
@@ -233,11 +232,6 @@ class MainWindow(QMainWindow):
 
                 print(f"Los errores son:\n{textAux}")
                 self.mostrarConsola(codeOutput, textAux)
-
-
-
-
-
 
 
 

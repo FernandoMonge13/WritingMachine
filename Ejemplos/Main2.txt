@@ -2,7 +2,9 @@
 
 PARA MAIN []
 
-PrintLine("DDDDD");
-PrintLine(Sum(1,1));
+PrintLine("DDDDD", "hola");
+Down;
+
+
 FIN
 
